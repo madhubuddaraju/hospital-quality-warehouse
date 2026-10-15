@@ -22,7 +22,8 @@ def payload(warehouse: Path, target: Path, results_path: Path) -> dict:
     catalog = _rows(con, "select measure_id, label, domain, reasons, lower_is_better, unit from reference.measure_catalog")
     mids = [m["measure_id"] for m in catalog]
     hospitals = _rows(con, """select facility_id, facility_name, city, state, zip5, round(lat, 3) lat, round(lon, 3) lon,
-                                     overall_rating, hospital_type, has_emergency_services, ed_volume, phone, location_source
+                                     overall_rating, hospital_type, has_emergency_services, ed_volume, phone, location_source,
+                                     ownership = 'Veterans Administration' as is_va
                               from marts.dim_hospitals where lat is not null order by facility_id""")
     index = {h["facility_id"]: i for i, h in enumerate(hospitals)}
     values = [[None] * len(mids) for _ in hospitals]

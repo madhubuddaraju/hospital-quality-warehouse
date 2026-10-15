@@ -39,6 +39,8 @@ header.top nav a:hover { color: var(--ink); text-decoration: underline; }
 .ask h1 input { width: 3.6em; }
 .ask h1 select { max-width: 100%; }
 .ask p { color: var(--muted); margin: 14px 0 0; max-width: 70ch; }
+.ask .va { display: inline-flex; gap: 8px; align-items: center; margin-top: 12px; font-size: 14.5px; color: var(--muted); cursor: pointer; }
+.ask .va input { width: 16px; height: 16px; accent-color: var(--accent); }
 .ask .try { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 12px; font-size: 14px; color: var(--faint); }
 .ask .try button { font: inherit; font-size: 14px; background: none; border: 1px solid var(--rule); border-radius: 999px; padding: 3px 11px; color: var(--muted); cursor: pointer; }
 .ask .try button:hover { border-color: var(--faint); color: var(--ink); }
@@ -132,6 +134,7 @@ footer { padding: 28px 0 48px; border-top: 1px solid var(--rule); font-size: 13.
   <section class="ask" aria-label="Find a hospital">
     <h1>I need care for <select id="reason" aria-label="Reason for care"></select> near ZIP <input id="zip" inputmode="numeric" maxlength="5" aria-label="ZIP code" value="10001"> within <select id="radius" aria-label="Distance"><option>10</option><option selected>25</option><option>50</option><option>100</option></select> miles.</h1>
     <p>Hospitals are ranked on the Medicare measures that matter for that reason: deaths, readmissions, complications, infections, ER waits and patient ratings, each compared with every other US hospital. Measures specific to the reason count fully; hospital-wide ones count half.</p>
+    <label class="va"><input type="checkbox" id="va"> Include veterans' (VA) hospitals, which mainly treat veterans</label>
     <div class="try"><span>Try</span><button type="button" data-z="60611" data-r="heart_attack">Chicago, heart attack</button><button type="button" data-z="77030" data-r="hip_knee">Houston, hip or knee</button><button type="button" data-z="02115" data-r="emergency">Boston, ER visit</button><button type="button" data-z="94110" data-r="stroke">San Francisco, stroke</button></div>
   </section>
 
@@ -245,7 +248,9 @@ function search() {
     $("status").innerHTML = /^\d{5}$/.test(zip) ? `ZIP ${esc(zip)} isn't in the Census list of ZIP codes. Try a nearby residential ZIP.` : "Enter a five-digit ZIP code.";
     $("list").innerHTML = ""; drawLocator(null, []); return;
   }
-  const near = (SCORES[reason] || []).map((r) => ({ ...r, d: miles(here, [H[r.i].lat, H[r.i].lon]) })).filter((r) => r.d <= radius)
+  const va = $("va").checked;
+  const near = (SCORES[reason] || []).filter((r) => va || !H[r.i].is_va)
+    .map((r) => ({ ...r, d: miles(here, [H[r.i].lat, H[r.i].lon]) })).filter((r) => r.d <= radius)
     .sort((a, b) => b.s - a.s || a.d - b.d);
   const top = near.slice(0, 12);
   $("status").innerHTML = near.length
@@ -278,7 +283,7 @@ function drawLocator(here, top, radius) {
   $("loc").innerHTML = g;
   $("locNote").textContent = top.length ? "Numbers match the ranked list. Positions use ZIP code centres." : "";
 }
-for (const id of ["reason", "radius"]) $(id).addEventListener("change", search);
+for (const id of ["reason", "radius", "va"]) $(id).addEventListener("change", search);
 $("zip").addEventListener("input", () => { if ($("zip").value.trim().length === 5) search(); });
 document.querySelector(".try").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; $("zip").value = b.dataset.z; $("reason").value = b.dataset.r; search(); });
 search();
