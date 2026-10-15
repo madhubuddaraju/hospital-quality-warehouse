@@ -22,8 +22,10 @@ models:
       - {name: ed_volume, data_type: varchar}
       - name: lat
         data_type: double
-        description: Latitude of the hospital's ZIP code centroid (not the building).
-        data_tests: [{between: {arguments: {min_value: 13, max_value: 72}}}]
+        description: >
+          Latitude of the hospital's ZIP code centroid (not the building). US territories reach from American Samoa
+          (about 14 degrees south) to northern Alaska.
+        data_tests: [{between: {arguments: {min_value: -15, max_value: 72}}}]
       - name: lon
         data_type: double
         data_tests: [{between: {arguments: {min_value: -180, max_value: 146}}}]
