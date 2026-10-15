@@ -29,7 +29,8 @@ FIXTURES = ROOT / "tests" / "fixtures"
 REPORTS = ROOT / "reports"
 
 METASTORE = "https://data.cms.gov/provider-data/api/1/metastore/schemas/dataset/items/{}"
-ARCHIVE = "https://data.cms.gov/provider-data/sites/default/files/archive/Hospitals/{y}/hospitals_{m:02d}_{y}.zip"
+ARCHIVE_LIST = "https://data.cms.gov/provider-data/api/1/archive/aggregate/theme/hospitals/relative"
+CMS = "https://data.cms.gov"
 ZCTA = "https://www2.census.gov/geo/docs/maps-data/data/gazetteer/{y}_Gazetteer/{y}_Gaz_zcta_national.zip"
 
 # name -> CMS Provider Data Catalog dataset id
@@ -120,45 +121,39 @@ def general_member(names: list[str]) -> str | None:
 
 
 def fetch_history(start_year: int = 2021) -> list[dict]:
-    """Past releases of Hospital General Information, extracted from CMS's monthly archive zips.
+    """Past releases of Hospital General Information, from CMS's archive of every data update.
 
-    Reads only the one CSV needed from each zip using HTTP range requests (the zips are hundreds of MB).
+    The archive API lists one zip per update date. Only updates that include Hospital General Information
+    (about quarterly) contribute a release. Each zip is read with HTTP range requests where possible,
+    so only the one CSV needed is transferred.
     """
     from remotezip import RemoteZip
 
     HISTORY.mkdir(parents=True, exist_ok=True)
+    items = [i for i in get(ARCHIVE_LIST).json()["data"] if i.get("type") == "theme" and i["date"][:4] >= str(start_year)]
     found = []
-    now = datetime.now(UTC)
-    for y in range(start_year, now.year + 1):
-        for m in range(1, 13):
-            if (y, m) > (now.year, now.month):
-                break
-            url = ARCHIVE.format(y=y, m=m)
-            out = HISTORY / f"hospital_general_{y}_{m:02d}.parquet"
-            if out.exists():
-                found.append({"release": f"{y}-{m:02d}", "url": url, "cached": True})
-                continue
-            if S.head(url, timeout=60, allow_redirects=True).status_code != 200:
-                continue
-            try:
-                with RemoteZip(url, session=S) as z:
-                    member = general_member(z.namelist())
-                    if member is None:
-                        print(f"  {y}-{m:02d}: no general information file in archive", flush=True)
-                        continue
-                    blob = z.read(member)
-            except Exception as e:  # server without range support: fall back to a full download
-                print(f"  {y}-{m:02d}: range read failed ({e}); downloading whole archive", flush=True)
-                with zipfile.ZipFile(io.BytesIO(get(url).content)) as z:
-                    member = general_member(z.namelist())
-                    if member is None:
-                        continue
-                    blob = z.read(member)
-            df = read_csv(blob)
-            df["_release"] = f"{y}-{m:02d}-01"
-            df.to_parquet(out, index=False)
-            found.append({"release": f"{y}-{m:02d}", "url": url, "member": member, "rows": len(df)})
-            print(f"history {y}-{m:02d}: {len(df):,} hospitals ({member})", flush=True)
+    for it in sorted(items, key=lambda i: i["date"]):
+        date, url = it["date"], CMS + it["url"]
+        out = HISTORY / f"hospital_general_{date}.parquet"
+        if out.exists():
+            found.append({"release": date, "url": url, "cached": True})
+            continue
+        try:
+            with RemoteZip(url, session=S) as z:
+                member = general_member(z.namelist())
+                blob = z.read(member) if member else None
+        except Exception as e:  # server without range support: fall back to a full download
+            print(f"  {date}: range read failed ({e}); downloading whole archive", flush=True)
+            with zipfile.ZipFile(io.BytesIO(get(url).content)) as z:
+                member = general_member(z.namelist())
+                blob = z.read(member) if member else None
+        if blob is None:
+            continue                                   # this update did not touch hospital general information
+        df = read_csv(blob)
+        df["_release"] = date
+        df.to_parquet(out, index=False)
+        found.append({"release": date, "url": url, "member": member, "rows": len(df)})
+        print(f"history {date}: {len(df):,} hospitals ({member})", flush=True)
     return found
 
 
