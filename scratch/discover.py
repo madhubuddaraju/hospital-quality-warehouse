@@ -2,24 +2,15 @@ import re
 import requests
 S = requests.Session()
 S.headers["User-Agent"] = "Mozilla/5.0"
-page = S.get("https://data.cms.gov/provider-data/archived-data/hospitals", timeout=60).text
-srcs = re.findall(r'src="([^"]+\.js)"', page)
-print("scripts:", srcs[:20])
-for s in srcs:
-    url = s if s.startswith("http") else "https://data.cms.gov" + s
-    js = S.get(url, timeout=60).text
-    hits = sorted(set(re.findall(r'["\'`]([^"\'`]{0,80}archiv[^"\'`]{0,80})["\'`]', js, re.I)))
-    if hits:
-        print("==", url)
-        for h in hits[:40]:
-            print("  ", h)
-for u in ["https://data.cms.gov/provider-data/api/1/pdc/archive/hospitals",
-          "https://data.cms.gov/provider-data/api/1/pdc/topics/hospitals/archive",
-          "https://data.cms.gov/provider-data/api/1/archive/hospitals",
-          "https://data.cms.gov/provider-data/sites/default/files/archive/Hospitals/2025/hospitals_01_2025.zip",
-          "https://data.cms.gov/provider-data/sites/default/files/archive/Hospitals/current/hospitals_current_data.zip"]:
-    r = S.get(u, timeout=60, stream=True)
-    print(r.status_code, r.headers.get("content-type"), r.headers.get("content-length"), u)
-    if "json" in (r.headers.get("content-type") or ""):
-        print(r.text[:1500])
-    r.close()
+js = S.get("https://data.cms.gov/provider-data/js/index.js", timeout=60).text
+for m in re.finditer(r"archive/aggregate", js):
+    print("CTX:", js[max(0, m.start() - 300): m.end() + 120].replace("\n", " "))
+base = ["https://data.cms.gov/provider-data/api/1/pdc", "https://data.cms.gov/provider-data/api/1", "https://data.cms.gov/provider-data"]
+for b in base:
+    for t in ["hospitals", "Hospitals"]:
+        for suffix in [f"/archive/aggregate/theme/{t}/relative", "/archive/aggregate/current/theme/all/relative"]:
+            u = b + suffix
+            r = S.get(u, timeout=60)
+            print(r.status_code, r.headers.get("content-type"), u)
+            if r.ok and "json" in (r.headers.get("content-type") or ""):
+                print(r.text[:3000])
