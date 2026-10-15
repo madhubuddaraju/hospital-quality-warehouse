@@ -26,7 +26,24 @@ Ratings change every quarter and nobody keeps the history.
 - **Rating history since 2021.** Every past Medicare release replayed through a dbt snapshot, so each hospital's
   rating has a full Type 2 history dated by release.
 
-__RESULTS__
+## What the data shows
+
+From the national run (Medicare release of July 2026, 5,419 hospitals, history back to January 2021):
+
+| | |
+|---|---|
+| Hospitals on the map | **5,419** (136 placed at a nearby ZIP because their own is a PO-box ZIP) |
+| Hospitals with enough data to rank | 4,029 for a general stay, 3,892 for an ER visit, 1,837 for a heart attack, 1,657 for hip or knee replacement |
+| Releases replayed into the rating history | **25** (Jan 2021 to Jul 2026) |
+| How often star ratings change | about **once a year**; each time 1,100 to 1,850 hospitals move up or down |
+| Five-star hospitals | 406 in Jan 2021, 483 at the peak (Oct 2023), 290 in Aug 2025, 384 today |
+| Watch list | **182** hospitals: 41 worse than national on two or more outcomes, 141 whose rating fell by two stars or to one star in the past year |
+| Share of rated hospitals with 4 or 5 stars | highest in Utah (79%), Colorado (73%), South Dakota (72%); lowest in Mississippi (13%), Puerto Rico and DC (14%) |
+| Median time in the ER before going home | 105 minutes in North Dakota up to 328 in DC |
+| Last build | 16 models, 27 data tests and 3 unit tests; 48 of 48 checks passed |
+
+The history is why the snapshot matters: a hospital's rating today says little about direction, but 25 releases
+show whether it is improving or slipping, and the watch list uses that.
 
 ## How it's built
 
