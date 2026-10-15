@@ -95,7 +95,9 @@ def fetch_zcta() -> dict:
         if r.status_code == 200:
             with zipfile.ZipFile(io.BytesIO(r.content)) as z:
                 txt = z.read(z.namelist()[0]).decode("utf-8")
-            df = pd.read_csv(io.StringIO(txt), sep="\t", dtype=str)
+            header = txt.split("\n", 1)[0]
+            sep = "|" if "|" in header else "\t"           # 2026 files switched from tabs to pipes
+            df = pd.read_csv(io.StringIO(txt), sep=sep, dtype=str)
             df.columns = [c.strip().lower().lstrip("\ufeff") for c in df.columns]
 
             def col(part: str) -> str:
@@ -103,7 +105,8 @@ def fetch_zcta() -> dict:
                 if not hit:
                     raise SystemExit(f"Census file {y} has no column like {part!r}: {list(df.columns)}")
                 return hit[0]
-            out = pd.DataFrame({"zip": df[col("geoid")].str.strip().str[-5:].str.zfill(5),
+            gid = next((c for c in df.columns if c == "geoid"), col("geoid"))
+            out = pd.DataFrame({"zip": df[gid].str.strip().str[-5:].str.zfill(5),
                                 "lat": df[col("intptlat")].astype(float), "lon": df[col("intptlong")].astype(float)})
             out.to_parquet(CURRENT / "zip_centroids.parquet", index=False)
             print(f"zip centroids: {len(out):,} ZIP codes from the {y} Census gazetteer", flush=True)
