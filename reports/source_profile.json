@@ -1,0 +1,1164 @@
+{
+ "hospital_general": {
+  "rows": 5419,
+  "columns": [
+   "facility_id",
+   "facility_name",
+   "address",
+   "city_town",
+   "state",
+   "zip_code",
+   "county_parish",
+   "telephone_number",
+   "hospital_type",
+   "hospital_ownership",
+   "emergency_services",
+   "meets_criteria_for_birthing_friendly_designation",
+   "hospital_overall_rating",
+   "hospital_overall_rating_footnote",
+   "mort_group_measure_count",
+   "count_of_facility_mort_measures",
+   "count_of_mort_measures_better",
+   "count_of_mort_measures_no_different",
+   "count_of_mort_measures_worse",
+   "mort_group_footnote",
+   "safety_group_measure_count",
+   "count_of_facility_safety_measures",
+   "count_of_safety_measures_better",
+   "count_of_safety_measures_no_different",
+   "count_of_safety_measures_worse",
+   "safety_group_footnote",
+   "readm_group_measure_count",
+   "count_of_facility_readm_measures",
+   "count_of_readm_measures_better",
+   "count_of_readm_measures_no_different",
+   "count_of_readm_measures_worse",
+   "readm_group_footnote",
+   "pt_exp_group_measure_count",
+   "count_of_facility_pt_exp_measures",
+   "pt_exp_group_footnote",
+   "te_group_measure_count",
+   "count_of_facility_te_measures",
+   "te_group_footnote",
+   "_cms_modified"
+  ],
+  "example": {
+   "facility_id": "010001",
+   "facility_name": "SOUTHEAST HEALTH MEDICAL CENTER",
+   "address": "1108 ROSS CLARK CIRCLE",
+   "city_town": "DOTHAN",
+   "state": "AL",
+   "zip_code": "36301",
+   "county_parish": "HOUSTON",
+   "telephone_number": "(334) 793-8701",
+   "hospital_type": "Acute Care Hospitals",
+   "hospital_ownership": "Government - Hospital District or Authority",
+   "emergency_services": "Yes",
+   "meets_criteria_for_birthing_friendly_designation": "Y",
+   "hospital_overall_rating": "4",
+   "hospital_overall_rating_footnote": "",
+   "mort_group_measure_count": "8",
+   "count_of_facility_mort_measures": "8",
+   "count_of_mort_measures_better": "0",
+   "count_of_mort_measures_no_different": "8",
+   "count_of_mort_measures_worse": "0",
+   "mort_group_footnote": "",
+   "safety_group_measure_count": "8",
+   "count_of_facility_safety_measures": "7",
+   "count_of_safety_measures_better": "3",
+   "count_of_safety_measures_no_different": "4",
+   "count_of_safety_measures_worse": "0",
+   "safety_group_footnote": "",
+   "readm_group_measure_count": "11",
+   "count_of_facility_readm_measures": "11",
+   "count_of_readm_measures_better": "1",
+   "count_of_readm_measures_no_different": "9",
+   "count_of_readm_measures_worse": "1",
+   "readm_group_footnote": "",
+   "pt_exp_group_measure_count": "15",
+   "count_of_facility_pt_exp_measures": "15",
+   "pt_exp_group_footnote": "",
+   "te_group_measure_count": "10",
+   "count_of_facility_te_measures": "10",
+   "te_group_footnote": "",
+   "_cms_modified": "2026-07-22"
+  }
+ },
+ "unplanned_visits": {
+  "rows": 67060,
+  "columns": [
+   "facility_id",
+   "facility_name",
+   "address",
+   "city_town",
+   "state",
+   "zip_code",
+   "county_parish",
+   "telephone_number",
+   "measure_id",
+   "measure_name",
+   "compared_to_national",
+   "denominator",
+   "score",
+   "lower_estimate",
+   "higher_estimate",
+   "number_of_patients",
+   "number_of_patients_returned",
+   "footnote",
+   "start_date",
+   "end_date",
+   "_cms_modified"
+  ],
+  "example": {
+   "facility_id": "010001",
+   "facility_name": "SOUTHEAST HEALTH MEDICAL CENTER",
+   "address": "1108 ROSS CLARK CIRCLE",
+   "city_town": "DOTHAN",
+   "state": "AL",
+   "zip_code": "36301",
+   "county_parish": "HOUSTON",
+   "telephone_number": "(334) 793-8701",
+   "measure_id": "EDAC_30_AMI",
+   "measure_name": "Hospital return days for heart attack patients",
+   "compared_to_national": "Not Available",
+   "denominator": "242",
+   "score": "-2.6",
+   "lower_estimate": "Not Available",
+   "higher_estimate": "Not Available",
+   "number_of_patients": "235",
+   "number_of_patients_returned": "Not Available",
+   "footnote": "",
+   "start_date": "07/01/2022",
+   "end_date": "06/30/2025",
+   "_cms_modified": "2026-09-10"
+  },
+  "measures": {
+   "EDAC_30_AMI": {
+    "name": "Hospital return days for heart attack patients",
+    "rows": 4790,
+    "not_available": 3258
+   },
+   "EDAC_30_HF": {
+    "name": "Hospital return days for heart failure patients",
+    "rows": 4790,
+    "not_available": 1682
+   },
+   "EDAC_30_PN": {
+    "name": "Hospital return days for pneumonia patients",
+    "rows": 4790,
+    "not_available": 1138
+   },
+   "Hybrid_HWR": {
+    "name": "Hybrid Hospital-Wide All-Cause Readmission Measure (HWR)",
+    "rows": 4790,
+    "not_available": 4790
+   },
+   "OP_32": {
+    "name": "Rate of unplanned hospital visits after colonoscopy (per 1,000 colonoscopies)",
+    "rows": 4790,
+    "not_available": 1653
+   },
+   "OP_35_ADM": {
+    "name": "Rate of inpatient admissions for patients receiving outpatient chemotherapy",
+    "rows": 4790,
+    "not_available": 3284
+   },
+   "OP_35_ED": {
+    "name": "Rate of emergency department (ED) visits for patients receiving outpatient chemotherapy",
+    "rows": 4790,
+    "not_available": 3284
+   },
+   "OP_36": {
+    "name": "Ratio of unplanned hospital visits after hospital outpatient surgery",
+    "rows": 4790,
+    "not_available": 2078
+   },
+   "READM_30_AMI": {
+    "name": "Acute Myocardial Infarction (AMI) 30-Day Readmission Rate",
+    "rows": 4790,
+    "not_available": 2819
+   },
+   "READM_30_CABG": {
+    "name": "Rate of readmission for CABG",
+    "rows": 4790,
+    "not_available": 3852
+   },
+   "READM_30_COPD": {
+    "name": "Rate of readmission for chronic obstructive pulmonary disease (COPD) patients",
+    "rows": 4790,
+    "not_available": 1704
+   },
+   "READM_30_HF": {
+    "name": "Heart failure (HF) 30-Day Readmission Rate",
+    "rows": 4790,
+    "not_available": 1537
+   },
+   "READM_30_HIP_KNEE": {
+    "name": "Rate of readmission after hip/knee replacement",
+    "rows": 4790,
+    "not_available": 3095
+   },
+   "READM_30_PN": {
+    "name": "Pneumonia (PN) 30-Day Readmission Rate",
+    "rows": 4790,
+    "not_available": 1032
+   }
+  }
+ },
+ "complications_deaths": {
+  "rows": 95800,
+  "columns": [
+   "facility_id",
+   "facility_name",
+   "address",
+   "city_town",
+   "state",
+   "zip_code",
+   "county_parish",
+   "telephone_number",
+   "measure_id",
+   "measure_name",
+   "compared_to_national",
+   "denominator",
+   "score",
+   "lower_estimate",
+   "higher_estimate",
+   "footnote",
+   "start_date",
+   "end_date",
+   "_cms_modified"
+  ],
+  "example": {
+   "facility_id": "010001",
+   "facility_name": "SOUTHEAST HEALTH MEDICAL CENTER",
+   "address": "1108 ROSS CLARK CIRCLE",
+   "city_town": "DOTHAN",
+   "state": "AL",
+   "zip_code": "36301",
+   "county_parish": "HOUSTON",
+   "telephone_number": "(334) 793-8701",
+   "measure_id": "COMP_HIP_KNEE",
+   "measure_name": "Rate of complications for hip/knee replacement patients",
+   "compared_to_national": "Not Available",
+   "denominator": "33",
+   "score": "3.8",
+   "lower_estimate": "Not Available",
+   "higher_estimate": "Not Available",
+   "footnote": "",
+   "start_date": "04/01/2023",
+   "end_date": "03/31/2025",
+   "_cms_modified": "2026-09-10"
+  },
+  "measures": {
+   "COMP_HIP_KNEE": {
+    "name": "Rate of complications for hip/knee replacement patients",
+    "rows": 4790,
+    "not_available": 3084
+   },
+   "Hybrid_HWM": {
+    "name": "Hybrid Hospital-Wide All-Cause Risk Standardized Mortality Rate",
+    "rows": 4790,
+    "not_available": 529
+   },
+   "MORT_30_AMI": {
+    "name": "Death rate for heart attack patients",
+    "rows": 4790,
+    "not_available": 2855
+   },
+   "MORT_30_CABG": {
+    "name": "Death rate for CABG surgery patients",
+    "rows": 4790,
+    "not_available": 3929
+   },
+   "MORT_30_COPD": {
+    "name": "Death rate for COPD patients",
+    "rows": 4790,
+    "not_available": 2167
+   },
+   "MORT_30_HF": {
+    "name": "Death rate for heart failure patients",
+    "rows": 4790,
+    "not_available": 1741
+   },
+   "MORT_30_PN": {
+    "name": "Death rate for pneumonia patients",
+    "rows": 4790,
+    "not_available": 1151
+   },
+   "MORT_30_STK": {
+    "name": "Death rate for stroke patients",
+    "rows": 4790,
+    "not_available": 2368
+   },
+   "PSI_03": {
+    "name": "Pressure ulcer rate",
+    "rows": 4790,
+    "not_available": 1734
+   },
+   "PSI_04": {
+    "name": "Death rate among surgical inpatients with serious treatable complications",
+    "rows": 4790,
+    "not_available": 3269
+   },
+   "PSI_06": {
+    "name": "Iatrogenic pneumothorax rate",
+    "rows": 4790,
+    "not_available": 1705
+   },
+   "PSI_08": {
+    "name": "In-hospital fall-associated fracture rate",
+    "rows": 4790,
+    "not_available": 1706
+   },
+   "PSI_09": {
+    "name": "Postoperative hemorrhage or hematoma rate",
+    "rows": 4790,
+    "not_available": 1964
+   },
+   "PSI_10": {
+    "name": "Postoperative acute kidney injury requiring dialysis rate",
+    "rows": 4790,
+    "not_available": 2338
+   },
+   "PSI_11": {
+    "name": "Postoperative respiratory failure rate",
+    "rows": 4790,
+    "not_available": 2329
+   },
+   "PSI_12": {
+    "name": "Perioperative pulmonary embolism or deep vein thrombosis rate",
+    "rows": 4790,
+    "not_available": 1957
+   },
+   "PSI_13": {
+    "name": "Postoperative sepsis rate",
+    "rows": 4790,
+    "not_available": 2384
+   },
+   "PSI_14": {
+    "name": "Postoperative wound dehiscence rate",
+    "rows": 4790,
+    "not_available": 2316
+   },
+   "PSI_15": {
+    "name": "Abdominopelvic accidental puncture or laceration rate",
+    "rows": 4790,
+    "not_available": 2000
+   },
+   "PSI_90": {
+    "name": "CMS Medicare PSI 90: Patient safety and adverse events composite",
+    "rows": 4790,
+    "not_available": 1882
+   }
+  }
+ },
+ "timely_care": {
+  "rows": 138084,
+  "columns": [
+   "facility_id",
+   "facility_name",
+   "address",
+   "city_town",
+   "state",
+   "zip_code",
+   "county_parish",
+   "telephone_number",
+   "condition",
+   "measure_id",
+   "measure_name",
+   "score",
+   "sample",
+   "footnote",
+   "start_date",
+   "end_date",
+   "_cms_modified"
+  ],
+  "example": {
+   "facility_id": "010001",
+   "facility_name": "SOUTHEAST HEALTH MEDICAL CENTER",
+   "address": "1108 ROSS CLARK CIRCLE",
+   "city_town": "DOTHAN",
+   "state": "AL",
+   "zip_code": "36301",
+   "county_parish": "HOUSTON",
+   "telephone_number": "(334) 793-8701",
+   "condition": "Emergency Department",
+   "measure_id": "EDV",
+   "measure_name": "Emergency department volume",
+   "score": "very high",
+   "sample": "",
+   "footnote": "",
+   "start_date": "01/01/2024",
+   "end_date": "12/31/2024",
+   "_cms_modified": "2026-07-22"
+  },
+  "measures": {
+   "EDV": {
+    "name": "Emergency department volume",
+    "rows": 4658,
+    "not_available": 832
+   },
+   "GMCS": {
+    "name": "Global Malnutrition Composite Score",
+    "rows": 4658,
+    "not_available": 4658
+   },
+   "GMCS_Malnutrition_Diagnosis_Documented": {
+    "name": "Global Malnutrition Composite Score: Malnutrition Diagnosis Documented",
+    "rows": 4658,
+    "not_available": 4658
+   },
+   "GMCS_Malnutrition_Screening": {
+    "name": "Global Malnutrition Composite Score: Malnutrition Risk Screening",
+    "rows": 4658,
+    "not_available": 4658
+   },
+   "GMCS_Nutrition_Assessment": {
+    "name": "Global Malnutrition Composite Score: Nutrition Assessment",
+    "rows": 4658,
+    "not_available": 4658
+   },
+   "GMCS_Nutritional_Care_Plan": {
+    "name": "Global Malnutrition Composite Score: Nutritional Care Plan",
+    "rows": 4658,
+    "not_available": 4658
+   },
+   "HH_HYPER": {
+    "name": "Hospital Harm - Severe Hyperglycemia",
+    "rows": 4658,
+    "not_available": 3721
+   },
+   "HH_HYPO": {
+    "name": "Hospital Harm - Severe Hypoglycemia",
+    "rows": 4658,
+    "not_available": 3243
+   },
+   "HH_ORAE": {
+    "name": "Hospital Harm - Opioid Related Adverse Events",
+    "rows": 4658,
+    "not_available": 4016
+   },
+   "IMM_3": {
+    "name": "Healthcare workers given influenza vaccination",
+    "rows": 4658,
+    "not_available": 398
+   },
+   "OP_18a": {
+    "name": "Average (median) time all patients spent in the emergency department before leaving from the visit, including psychiatric/mental health patients and patients who were transferred to another facility. A lower number of minutes is better",
+    "rows": 4658,
+    "not_available": 606
+   },
+   "OP_18b": {
+    "name": "Average (median) time patients spent in the emergency department before leaving from the visit, excluding patients transferred to another facility or psychiatric care/mental health patients. A lower number of minutes is better",
+    "rows": 4658,
+    "not_available": 577
+   },
+   "OP_18c": {
+    "name": "Average (median) time psychiatric/mental health patients spent in the emergency department before leaving from the visit. A lower number of minutes is better",
+    "rows": 4658,
+    "not_available": 1635
+   },
+   "OP_18d": {
+    "name": "Average (median) time patients spent in the emergency department before being transferred to another facility. A lower number of minutes is better",
+    "rows": 4658,
+    "not_available": 2294
+   },
+   "OP_22": {
+    "name": "Left before being seen",
+    "rows": 4658,
+    "not_available": 837
+   },
+   "OP_23": {
+    "name": "Head CT results",
+    "rows": 4658,
+    "not_available": 3166
+   },
+   "OP_29": {
+    "name": "Endoscopy/polyp surveillance: appropriate follow-up interval for normal colonoscopy in average risk patients",
+    "rows": 4658,
+    "not_available": 1809
+   },
+   "OP_31": {
+    "name": "Improvement in Patient's Visual Function within 90 Days Following Cataract Surgery",
+    "rows": 4658,
+    "not_available": 4643
+   },
+   "OP_40": {
+    "name": "ST-Segment Elevation Myocardial Infarction (STEMI)",
+    "rows": 4394,
+    "not_available": 4001
+   },
+   "SAFE_USE_OF_OPIOIDS": {
+    "name": "Safe Use of Opioids - Concurrent Prescribing",
+    "rows": 4426,
+    "not_available": 686
+   },
+   "SEP_1": {
+    "name": "Appropriate care for severe sepsis and septic shock",
+    "rows": 4658,
+    "not_available": 1543
+   },
+   "SEP_SH_3HR": {
+    "name": "Septic Shock 3-Hour Bundle",
+    "rows": 4658,
+    "not_available": 2003
+   },
+   "SEP_SH_6HR": {
+    "name": "Septic Shock 6-Hour Bundle",
+    "rows": 4658,
+    "not_available": 2441
+   },
+   "SEV_SEP_3HR": {
+    "name": "Severe Sepsis 3-Hour Bundle",
+    "rows": 4658,
+    "not_available": 1564
+   },
+   "SEV_SEP_6HR": {
+    "name": "Severe Sepsis 6-Hour Bundle",
+    "rows": 4658,
+    "not_available": 1701
+   },
+   "STK_02": {
+    "name": "Discharged on Antithrombotic Therapy",
+    "rows": 4426,
+    "not_available": 2821
+   },
+   "STK_03": {
+    "name": "Anticoagulation Therapy for Atrial Fibrillation/Flutter",
+    "rows": 4426,
+    "not_available": 4131
+   },
+   "STK_05": {
+    "name": "Antithrombotic Therapy by End of Hospital Day 2",
+    "rows": 4426,
+    "not_available": 3123
+   },
+   "VTE_1": {
+    "name": "Venous Thromboembolism Prophylaxis",
+    "rows": 4426,
+    "not_available": 2242
+   },
+   "VTE_2": {
+    "name": "Intensive Care Unit Venous Thromboembolism Prophylaxis",
+    "rows": 4426,
+    "not_available": 3015
+   }
+  }
+ },
+ "patient_survey": {
+  "rows": 325720,
+  "columns": [
+   "facility_id",
+   "facility_name",
+   "address",
+   "city_town",
+   "state",
+   "zip_code",
+   "county_parish",
+   "telephone_number",
+   "hcahps_measure_id",
+   "hcahps_question",
+   "hcahps_answer_description",
+   "patient_survey_star_rating",
+   "patient_survey_star_rating_footnote",
+   "hcahps_answer_percent",
+   "hcahps_answer_percent_footnote",
+   "hcahps_linear_mean_value",
+   "number_of_completed_surveys",
+   "number_of_completed_surveys_footnote",
+   "survey_response_rate_percent",
+   "survey_response_rate_percent_footnote",
+   "start_date",
+   "end_date",
+   "_cms_modified"
+  ],
+  "example": {
+   "facility_id": "010001",
+   "facility_name": "SOUTHEAST HEALTH MEDICAL CENTER",
+   "address": "1108 ROSS CLARK CIRCLE",
+   "city_town": "DOTHAN",
+   "state": "AL",
+   "zip_code": "36301",
+   "county_parish": "HOUSTON",
+   "telephone_number": "(334) 793-8701",
+   "hcahps_measure_id": "H_COMP_1_A_P",
+   "hcahps_question": "Patients who reported that their nurses \"Always\" communicated well",
+   "hcahps_answer_description": "Nurses \"always\" communicated well",
+   "patient_survey_star_rating": "Not Applicable",
+   "patient_survey_star_rating_footnote": "",
+   "hcahps_answer_percent": "76",
+   "hcahps_answer_percent_footnote": "",
+   "hcahps_linear_mean_value": "Not Applicable",
+   "number_of_completed_surveys": "1392",
+   "number_of_completed_surveys_footnote": "",
+   "survey_response_rate_percent": "17",
+   "survey_response_rate_percent_footnote": "",
+   "start_date": "10/01/2024",
+   "end_date": "09/30/2025",
+   "_cms_modified": "2026-07-22"
+  },
+  "measures": {
+   "H_CLEAN_HSP_A_P": {
+    "name": "Patients who reported that their room and bathroom were \"Always\" clean",
+    "rows": 4790,
+    "not_available": 841
+   },
+   "H_CLEAN_HSP_SN_P": {
+    "name": "Patients who reported that their room and bathroom were \"Sometimes\" or \"Never\" clean",
+    "rows": 4790,
+    "not_available": 841
+   },
+   "H_CLEAN_HSP_U_P": {
+    "name": "Patients who reported that their room and bathroom were \"Usually\" clean",
+    "rows": 4790,
+    "not_available": 841
+   },
+   "H_CLEAN_LINEAR_SCORE": {
+    "name": "Cleanliness - linear mean score",
+    "rows": 4790,
+    "not_available": 0
+   },
+   "H_CLEAN_STAR_RATING": {
+    "name": "Cleanliness - star rating",
+    "rows": 4790,
+    "not_available": 0
+   },
+   "H_COMP_1_A_P": {
+    "name": "Patients who reported that their nurses \"Always\" communicated well",
+    "rows": 4790,
+    "not_available": 841
+   },
+   "H_COMP_1_LINEAR_SCORE": {
+    "name": "Nurse communication - linear mean score",
+    "rows": 4790,
+    "not_available": 0
+   },
+   "H_COMP_1_SN_P": {
+    "name": "Patients who reported that their nurses \"Sometimes\" or \"Never\" communicated well",
+    "rows": 4790,
+    "not_available": 841
+   },
+   "H_COMP_1_STAR_RATING": {
+    "name": "Nurse communication - star rating",
+    "rows": 4790,
+    "not_available": 0
+   },
+   "H_COMP_1_U_P": {
+    "name": "Patients who reported that their nurses \"Usually\" communicated well",
+    "rows": 4790,
+    "not_available": 841
+   },
+   "H_COMP_2_A_P": {
+    "name": "Patients who reported that their doctors \"Always\" communicated well",
+    "rows": 4790,
+    "not_available": 841
+   },
+   "H_COMP_2_LINEAR_SCORE": {
+    "name": "Doctor communication - linear mean score",
+    "rows": 4790,
+    "not_available": 0
+   },
+   "H_COMP_2_SN_P": {
+    "name": "Patients who reported that their doctors \"Sometimes\" or \"Never\" communicated well",
+    "rows": 4790,
+    "not_available": 841
+   },
+   "H_COMP_2_STAR_RATING": {
+    "name": "Doctor communication - star rating",
+    "rows": 4790,
+    "not_available": 0
+   },
+   "H_COMP_2_U_P": {
+    "name": "Patients who reported that their doctors \"Usually\" communicated well",
+    "rows": 4790,
+    "not_available": 841
+   },
+   "H_COMP_5_A_P": {
+    "name": "Patients who reported that staff \"Always\" explained about medicines before giving it to them",
+    "rows": 4790,
+    "not_available": 842
+   },
+   "H_COMP_5_LINEAR_SCORE": {
+    "name": "Communication about medicines - linear mean score",
+    "rows": 4790,
+    "not_available": 0
+   },
+   "H_COMP_5_SN_P": {
+    "name": "Patients who reported that staff \"Sometimes\" or \"Never\" explained about medicines before giving it to them",
+    "rows": 4790,
+    "not_available": 842
+   },
+   "H_COMP_5_STAR_RATING": {
+    "name": "Communication about medicines - star rating",
+    "rows": 4790,
+    "not_available": 0
+   },
+   "H_COMP_5_U_P": {
+    "name": "Patients who reported that staff \"Usually\" explained about medicines before giving it to them",
+    "rows": 4790,
+    "not_available": 842
+   },
+   "H_COMP_6_LINEAR_SCORE": {
+    "name": "Discharge information - linear mean score",
+    "rows": 4790,
+    "not_available": 0
+   },
+   "H_COMP_6_N_P": {
+    "name": "Patients who reported that NO, they were not given information about what to do during their recovery at home",
+    "rows": 4790,
+    "not_available": 841
+   },
+   "H_COMP_6_STAR_RATING": {
+    "name": "Discharge information - star rating",
+    "rows": 4790,
+    "not_available": 0
+   },
+   "H_COMP_6_Y_P": {
+    "name": "Patients who reported that YES, they were given information about what to do during their recovery at home",
+    "rows": 4790,
+    "not_available": 841
+   },
+   "H_DISCH_HELP_N_P": {
+    "name": "Patients who reported that NO, they did not discuss whether they would need help after discharge",
+    "rows": 4790,
+    "not_available": 1180
+   },
+   "H_DISCH_HELP_Y_P": {
+    "name": "Patients who reported that YES, they did discuss whether they would need help after discharge",
+    "rows": 4790,
+    "not_available": 1180
+   },
+   "H_DOCTOR_EXPLAIN_A_P": {
+    "name": "Patients who reported that their doctors \"Always\" explained things in a way they could understand",
+    "rows": 4790,
+    "not_available": 1180
+   },
+   "H_DOCTOR_EXPLAIN_SN_P": {
+    "name": "Patients who reported that their doctors \"Sometimes\" or \"Never\" explained things in a way they could understand",
+    "rows": 4790,
+    "not_available": 1180
+   },
+   "H_DOCTOR_EXPLAIN_U_P": {
+    "name": "Patients who reported that their doctors \"Usually\" explained things in a way they could understand",
+    "rows": 4790,
+    "not_available": 1180
+   },
+   "H_DOCTOR_LISTEN_A_P": {
+    "name": "Patients who reported that their doctors \"Always\" listened carefully to them",
+    "rows": 4790,
+    "not_available": 1180
+   },
+   "H_DOCTOR_LISTEN_SN_P": {
+    "name": "Patients who reported that their doctors \"Sometimes\" or \"Never\" listened carefully to them",
+    "rows": 4790,
+    "not_available": 1180
+   },
+   "H_DOCTOR_LISTEN_U_P": {
+    "name": "Patients who reported that their doctors \"Usually\" listened carefully to them",
+    "rows": 4790,
+    "not_available": 1180
+   },
+   "H_DOCTOR_RESPECT_A_P": {
+    "name": "Patients who reported that their doctors \"Always\" treated them with courtesy and respect",
+    "rows": 4790,
+    "not_available": 1180
+   },
+   "H_DOCTOR_RESPECT_SN_P": {
+    "name": "Patients who reported that their doctors \"Sometimes\" or \"Never\"  treated them with courtesy and respect",
+    "rows": 4790,
+    "not_available": 1180
+   },
+   "H_DOCTOR_RESPECT_U_P": {
+    "name": "Patients who reported that their doctors \"Usually\"  treated them with courtesy and respect",
+    "rows": 4790,
+    "not_available": 1180
+   },
+   "H_HSP_RATING_0_6": {
+    "name": "Patients who gave their hospital a rating of 6 or lower on a scale from 0 (lowest) to 10 (highest)",
+    "rows": 4790,
+    "not_available": 841
+   },
+   "H_HSP_RATING_7_8": {
+    "name": "Patients who gave their hospital a rating of 7 or 8 on a scale from 0 (lowest) to 10 (highest)",
+    "rows": 4790,
+    "not_available": 841
+   },
+   "H_HSP_RATING_9_10": {
+    "name": "Patients who gave their hospital a rating of 9 or 10 on a scale from 0 (lowest) to 10 (highest)",
+    "rows": 4790,
+    "not_available": 841
+   },
+   "H_HSP_RATING_LINEAR_SCORE": {
+    "name": "Overall hospital rating - linear mean score",
+    "rows": 4790,
+    "not_available": 0
+   },
+   "H_HSP_RATING_STAR_RATING": {
+    "name": "Overall hospital rating - star rating",
+    "rows": 4790,
+    "not_available": 0
+   },
+   "H_MED_FOR_A_P": {
+    "name": "Patients who reported that when receiving new medication the staff \"Always\" communicated what the medication was for",
+    "rows": 4790,
+    "not_available": 1180
+   },
+   "H_MED_FOR_SN_P": {
+    "name": "Patients who reported that when receiving new medication the staff \"Sometimes\" or \"Never\" communicated what the medication was for",
+    "rows": 4790,
+    "not_available": 1180
+   },
+   "H_MED_FOR_U_P": {
+    "name": "Patients who reported that when receiving new medication the staff \"Usually\" communicated what the medication was for.",
+    "rows": 4790,
+    "not_available": 1180
+   },
+   "H_NURSE_EXPLAIN_A_P": {
+    "name": "Patients who reported that their nurses \"Always\" explained things in a way they could understand",
+    "rows": 4790,
+    "not_available": 1180
+   },
+   "H_NURSE_EXPLAIN_SN_P": {
+    "name": "Patients who reported that their nurses \"Sometimes\" or \"Never\" explained things in a way they could understand",
+    "rows": 4790,
+    "not_available": 1180
+   },
+   "H_NURSE_EXPLAIN_U_P": {
+    "name": "Patients who reported that their nurses \"Usually\" explained things in a way they could understand",
+    "rows": 4790,
+    "not_available": 1180
+   },
+   "H_NURSE_LISTEN_A_P": {
+    "name": "Patients who reported that their nurses \"Always\" listened carefully to them",
+    "rows": 4790,
+    "not_available": 1180
+   },
+   "H_NURSE_LISTEN_SN_P": {
+    "name": "Patients who reported that their nurses \"Sometimes\" or \"Never\" listened carefully to them",
+    "rows": 4790,
+    "not_available": 1180
+   },
+   "H_NURSE_LISTEN_U_P": {
+    "name": "Patients who reported that their nurses \"Usually\" listened carefully to them",
+    "rows": 4790,
+    "not_available": 1180
+   },
+   "H_NURSE_RESPECT_A_P": {
+    "name": "Patients who reported that their nurses \"Always\" treated them with courtesy and respect",
+    "rows": 4790,
+    "not_available": 1180
+   },
+   "H_NURSE_RESPECT_SN_P": {
+    "name": "Patients who reported that their nurses \"Sometimes\" or \"Never\"  treated them with courtesy and respect",
+    "rows": 4790,
+    "not_available": 1180
+   },
+   "H_NURSE_RESPECT_U_P": {
+    "name": "Patients who reported that their nurses \"Usually\"  treated them with courtesy and respect",
+    "rows": 4790,
+    "not_available": 1180
+   },
+   "H_QUIET_HSP_A_P": {
+    "name": "Patients who reported that the area around their room was \"Always\" quiet at night",
+    "rows": 4790,
+    "not_available": 841
+   },
+   "H_QUIET_HSP_SN_P": {
+    "name": "Patients who reported that the area around their room was \"Sometimes\" or \"Never\" quiet at night",
+    "rows": 4790,
+    "not_available": 841
+   },
+   "H_QUIET_HSP_U_P": {
+    "name": "Patients who reported that the area around their room was \"Usually\" quiet at night",
+    "rows": 4790,
+    "not_available": 841
+   },
+   "H_QUIET_LINEAR_SCORE": {
+    "name": "Quietness - linear mean score",
+    "rows": 4790,
+    "not_available": 0
+   },
+   "H_QUIET_STAR_RATING": {
+    "name": "Quietness - star rating",
+    "rows": 4790,
+    "not_available": 0
+   },
+   "H_RECMND_DN": {
+    "name": "Patients who reported NO, they would probably not or definitely not recommend the hospital",
+    "rows": 4790,
+    "not_available": 841
+   },
+   "H_RECMND_DY": {
+    "name": "Patients who reported YES, they would definitely recommend the hospital",
+    "rows": 4790,
+    "not_available": 841
+   },
+   "H_RECMND_LINEAR_SCORE": {
+    "name": "Recommend hospital - linear mean score",
+    "rows": 4790,
+    "not_available": 0
+   },
+   "H_RECMND_PY": {
+    "name": "Patients who reported YES, they would probably recommend the hospital",
+    "rows": 4790,
+    "not_available": 841
+   },
+   "H_RECMND_STAR_RATING": {
+    "name": "Recommend hospital - star rating",
+    "rows": 4790,
+    "not_available": 0
+   },
+   "H_SIDE_EFFECTS_A_P": {
+    "name": "Patients who reported that when receiving new medication the staff \"Always\" discussed possible side effects",
+    "rows": 4790,
+    "not_available": 1180
+   },
+   "H_SIDE_EFFECTS_SN_P": {
+    "name": "Patients who reported that when receiving new medication the staff \"Sometimes\" or \"Never\" discussed possible side effects",
+    "rows": 4790,
+    "not_available": 1180
+   },
+   "H_SIDE_EFFECTS_U_P": {
+    "name": "Patients who reported that when receiving new medication the staff \"Usually\" discussed possible side effects",
+    "rows": 4790,
+    "not_available": 1180
+   },
+   "H_STAR_RATING": {
+    "name": "Summary star rating",
+    "rows": 4790,
+    "not_available": 0
+   },
+   "H_SYMPTOMS_N_P": {
+    "name": "Patients who reported that NO, they did not receive written information about possible symptoms to look out for after discharge",
+    "rows": 4790,
+    "not_available": 1180
+   },
+   "H_SYMPTOMS_Y_P": {
+    "name": "Patients who reported that YES, they did receive written information about possible symptoms to look out for after discharge",
+    "rows": 4790,
+    "not_available": 1180
+   }
+  }
+ },
+ "infections": {
+  "rows": 172440,
+  "columns": [
+   "facility_id",
+   "facility_name",
+   "address",
+   "city_town",
+   "state",
+   "zip_code",
+   "county_parish",
+   "telephone_number",
+   "measure_id",
+   "measure_name",
+   "compared_to_national",
+   "score",
+   "footnote",
+   "start_date",
+   "end_date",
+   "_cms_modified"
+  ],
+  "example": {
+   "facility_id": "010001",
+   "facility_name": "SOUTHEAST HEALTH MEDICAL CENTER",
+   "address": "1108 ROSS CLARK CIRCLE",
+   "city_town": "DOTHAN",
+   "state": "AL",
+   "zip_code": "36301",
+   "county_parish": "HOUSTON",
+   "telephone_number": "(334) 793-8701",
+   "measure_id": "HAI_1_CILOWER",
+   "measure_name": "Central Line Associated Bloodstream Infection (ICU + select Wards): Lower Confidence Limit",
+   "compared_to_national": "Better than the National Benchmark",
+   "score": "0.071",
+   "footnote": "",
+   "start_date": "10/01/2024",
+   "end_date": "09/30/2025",
+   "_cms_modified": "2026-07-22"
+  },
+  "measures": {
+   "HAI_1_CILOWER": {
+    "name": "Central Line Associated Bloodstream Infection (ICU + select Wards): Lower Confidence Limit",
+    "rows": 4790,
+    "not_available": 3257
+   },
+   "HAI_1_CIUPPER": {
+    "name": "Central Line Associated Bloodstream Infection (ICU + select Wards): Upper Confidence Limit",
+    "rows": 4790,
+    "not_available": 2854
+   },
+   "HAI_1_DOPC": {
+    "name": "Central Line Associated Bloodstream Infection: Number of Device Days",
+    "rows": 4790,
+    "not_available": 898
+   },
+   "HAI_1_ELIGCASES": {
+    "name": "Central Line Associated Bloodstream Infection (ICU + select Wards): Predicted Cases",
+    "rows": 4790,
+    "not_available": 898
+   },
+   "HAI_1_NUMERATOR": {
+    "name": "Central Line Associated Bloodstream Infection (ICU + select Wards): Observed Cases",
+    "rows": 4790,
+    "not_available": 898
+   },
+   "HAI_1_SIR": {
+    "name": "Central Line Associated Bloodstream Infection (ICU + select Wards)",
+    "rows": 4790,
+    "not_available": 2854
+   },
+   "HAI_2_CILOWER": {
+    "name": "Catheter Associated Urinary Tract Infections (ICU + select Wards): Lower Confidence Limit",
+    "rows": 4790,
+    "not_available": 3091
+   },
+   "HAI_2_CIUPPER": {
+    "name": "Catheter Associated Urinary Tract Infections (ICU + select Wards): Upper Confidence Limit",
+    "rows": 4790,
+    "not_available": 2555
+   },
+   "HAI_2_DOPC": {
+    "name": "Catheter Associated Urinary Tract Infections (ICU + select Wards): Number of Urinary Catheter Days",
+    "rows": 4790,
+    "not_available": 785
+   },
+   "HAI_2_ELIGCASES": {
+    "name": "Catheter Associated Urinary Tract Infections (ICU + select Wards): Predicted Cases",
+    "rows": 4790,
+    "not_available": 785
+   },
+   "HAI_2_NUMERATOR": {
+    "name": "Catheter Associated Urinary Tract Infections (ICU + select Wards): Observed Cases",
+    "rows": 4790,
+    "not_available": 785
+   },
+   "HAI_2_SIR": {
+    "name": "Catheter Associated Urinary Tract Infections (ICU + select Wards)",
+    "rows": 4790,
+    "not_available": 2555
+   },
+   "HAI_3_CILOWER": {
+    "name": "SSI - Colon Surgery: Lower Confidence Limit",
+    "rows": 4790,
+    "not_available": 3346
+   },
+   "HAI_3_CIUPPER": {
+    "name": "SSI - Colon Surgery: Upper Confidence Limit",
+    "rows": 4790,
+    "not_available": 3014
+   },
+   "HAI_3_DOPC": {
+    "name": "SSI - Colon Surgery: Number of Procedures",
+    "rows": 4790,
+    "not_available": 1874
+   },
+   "HAI_3_ELIGCASES": {
+    "name": "SSI - Colon Surgery: Predicted Cases",
+    "rows": 4790,
+    "not_available": 1874
+   },
+   "HAI_3_NUMERATOR": {
+    "name": "SSI - Colon Surgery: Observed Cases",
+    "rows": 4790,
+    "not_available": 1874
+   },
+   "HAI_3_SIR": {
+    "name": "SSI - Colon Surgery",
+    "rows": 4790,
+    "not_available": 3014
+   },
+   "HAI_4_CILOWER": {
+    "name": "SSI - Abdominal Hysterectomy: Lower Confidence Limit",
+    "rows": 4790,
+    "not_available": 4323
+   },
+   "HAI_4_CIUPPER": {
+    "name": "SSI - Abdominal Hysterectomy: Upper Confidence Limit",
+    "rows": 4790,
+    "not_available": 4189
+   },
+   "HAI_4_DOPC": {
+    "name": "SSI - Abdominal Hysterectomy: Number of Procedures",
+    "rows": 4790,
+    "not_available": 2192
+   },
+   "HAI_4_ELIGCASES": {
+    "name": "SSI - Abdominal Hysterectomy: Predicted Cases",
+    "rows": 4790,
+    "not_available": 2192
+   },
+   "HAI_4_NUMERATOR": {
+    "name": "SSI - Abdominal Hysterectomy: Observed Cases",
+    "rows": 4790,
+    "not_available": 2192
+   },
+   "HAI_4_SIR": {
+    "name": "SSI - Abdominal Hysterectomy",
+    "rows": 4790,
+    "not_available": 4189
+   },
+   "HAI_5_CILOWER": {
+    "name": "MRSA Bacteremia: Lower Confidence Limit",
+    "rows": 4790,
+    "not_available": 3376
+   },
+   "HAI_5_CIUPPER": {
+    "name": "MRSA Bacteremia: Upper Confidence Limit",
+    "rows": 4790,
+    "not_available": 3057
+   },
+   "HAI_5_DOPC": {
+    "name": "MRSA Bacteremia: Patient Days",
+    "rows": 4790,
+    "not_available": 755
+   },
+   "HAI_5_ELIGCASES": {
+    "name": "MRSA Bacteremia: Predicted Cases",
+    "rows": 4790,
+    "not_available": 755
+   },
+   "HAI_5_NUMERATOR": {
+    "name": "MRSA Bacteremia: Observed Cases",
+    "rows": 4790,
+    "not_available": 755
+   },
+   "HAI_5_SIR": {
+    "name": "MRSA Bacteremia",
+    "rows": 4790,
+    "not_available": 3057
+   },
+   "HAI_6_CILOWER": {
+    "name": "Clostridium Difficile (C.Diff): Lower Confidence Limit",
+    "rows": 4790,
+    "not_available": 2385
+   },
+   "HAI_6_CIUPPER": {
+    "name": "Clostridium Difficile (C.Diff): Upper Confidence Limit",
+    "rows": 4790,
+    "not_available": 1805
+   },
+   "HAI_6_DOPC": {
+    "name": "Clostridium Difficile (C.Diff): Patient Days",
+    "rows": 4790,
+    "not_available": 713
+   },
+   "HAI_6_ELIGCASES": {
+    "name": "Clostridium Difficile (C.Diff): Predicted Cases",
+    "rows": 4790,
+    "not_available": 717
+   },
+   "HAI_6_NUMERATOR": {
+    "name": "Clostridium Difficile (C.Diff): Observed Cases",
+    "rows": 4790,
+    "not_available": 717
+   },
+   "HAI_6_SIR": {
+    "name": "Clostridium Difficile (C.Diff)",
+    "rows": 4790,
+    "not_available": 1805
+   }
+  }
+ }
+}
