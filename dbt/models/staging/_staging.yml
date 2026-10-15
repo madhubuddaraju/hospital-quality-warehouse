@@ -1,0 +1,75 @@
+version: 2
+
+models:
+  - name: stg_cms__hospitals
+    description: Hospital General Information, typed and title-cased. One row per hospital.
+    columns:
+      - name: facility_id
+        description: CMS Certification Number (CCN), six characters.
+        data_tests: [unique, not_null]
+      - name: state
+        data_tests: [not_null]
+      - name: overall_rating
+        description: Overall star rating, 1-5. Null when CMS does not rate the hospital (too few measures, or not acute care).
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [1, 2, 3, 4, 5]
+                quote: false
+      - name: cms_modified
+        data_tests: [not_null]
+
+  - name: stg_cms__outcome_measures
+    description: Readmission, death and complication measures stacked from two CMS datasets.
+    columns:
+      - name: compared_to_national
+        description: CMS's significance judgement, normalised from six spellings into five values.
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [better, worse, no_different, too_few_cases, not_available]
+    data_tests:
+      - unique_combination:
+          arguments:
+            columns: [facility_id, measure_id]
+
+  - name: stg_cms__infections
+    columns:
+      - name: score
+        description: Standardized infection ratio (observed / predicted).
+        data_tests:
+          - between:
+              arguments: {min_value: 0, max_value: 50}
+
+  - name: stg_census__zip_centroids
+    columns:
+      - name: zip5
+        data_tests: [unique, not_null]
+
+unit_tests:
+  - name: comparison_spellings_are_normalised
+    description: CMS uses different wording per dataset; all of it must map onto the same five values.
+    model: stg_cms__outcome_measures
+    given:
+      - input: ref('base_cms__unplanned_visits')
+        format: csv
+        rows: |
+          facility_id,measure_id,measure_name,score,denominator,lower_estimate,higher_estimate,compared_to_national,start_date,end_date
+          A,READM_30_HF,x,20.1,500,Not Available,Not Available,Better Than the National Rate,07/01/2022,06/30/2025
+          A,READM_30_PN,x,Not Available,10,Not Available,Not Available,Number of Cases Too Small,07/01/2022,06/30/2025
+          A,READM_30_AMI,x,15.0,300,Not Available,Not Available,Worse than expected,07/01/2022,06/30/2025
+      - input: ref('base_cms__complications_deaths')
+        format: csv
+        rows: |
+          facility_id,measure_id,measure_name,score,denominator,lower_estimate,higher_estimate,compared_to_national,start_date,end_date
+          A,MORT_30_HF,x,11.2,400,9.1,13.5,No Different Than the National Rate,07/01/2022,06/30/2025
+          A,PSI_90,x,1.05,,,,Number of cases too small,07/01/2022,06/30/2025
+    expect:
+      format: csv
+      rows: |
+        measure_id,score,compared_to_national,period_start
+        READM_30_HF,20.1,better,2022-07-01
+        READM_30_PN,,too_few_cases,2022-07-01
+        READM_30_AMI,15.0,worse,2022-07-01
+        MORT_30_HF,11.2,no_different,2022-07-01
+        PSI_90,1.05,too_few_cases,2022-07-01

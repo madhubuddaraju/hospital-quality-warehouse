@@ -1,0 +1,11 @@
+reason,label
+heart_attack,Heart attack
+heart_failure,Heart failure
+pneumonia,Pneumonia
+copd,COPD or breathing problems
+heart_surgery,Heart bypass surgery
+hip_knee,Hip or knee replacement
+stroke,Stroke
+surgery,Other surgery
+emergency,Emergency room visit
+general,General hospital stay

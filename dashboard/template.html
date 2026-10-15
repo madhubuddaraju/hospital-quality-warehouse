@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hospital Quality Check</title>
+<meta name="description" content="Compare US hospitals near you on the Medicare quality measures that matter for your reason for care.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&display=swap">
+<style>
+/* Hospital chooser: a sentence-form search leads, results as ranked rows with a locator plot, then watch list,
+   rating history, states and pipeline health. Light theme only, white page. */
+:root {
+  color-scheme: light;
+  --paper: #ffffff; --ink: #15202b; --muted: #5b6470; --faint: #8b929b; --rule: #e1e4e8; --wash: #f4f5f7;
+  --accent: #2f3ba2; --accent-wash: #eceefb;
+  --better: #1e7f4f; --better-wash: #e6f4ec; --worse: #b3261e; --worse-wash: #fbeceb; --same: #8b929b;
+  --star: #c98a00;
+  --font: "Public Sans", "Helvetica Neue", Arial, sans-serif;
+}
+* { box-sizing: border-box; }
+html { background: var(--paper); -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 400 16px/1.55 var(--font); font-variant-numeric: tabular-nums; }
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.page { max-width: 1120px; margin: 0 auto; padding: 0 max(18px, env(safe-area-inset-right)) 0 max(18px, env(safe-area-inset-left)); }
+header.top { display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; padding: 22px 0 14px; border-bottom: 1px solid var(--rule); }
+header.top b { font-size: 19px; font-weight: 800; letter-spacing: -0.01em; }
+header.top span { color: var(--muted); font-size: 14px; }
+header.top nav { margin-left: auto; display: flex; gap: 18px; font-size: 14px; }
+header.top nav a { color: var(--muted); text-decoration: none; }
+header.top nav a:hover { color: var(--ink); text-decoration: underline; }
+
+.ask { padding: 40px 0 26px; }
+.ask h1 { font-size: clamp(26px, 3.6vw, 38px); font-weight: 700; letter-spacing: -0.02em; line-height: 1.25; margin: 0; max-width: 34ch; }
+.ask h1 select, .ask h1 input { font: inherit; color: var(--accent); background: var(--accent-wash); border: 0; border-bottom: 2px solid var(--accent);
+  border-radius: 4px 4px 0 0; padding: 0 6px; margin: 2px 0; }
+.ask h1 input { width: 3.6em; }
+.ask h1 select { max-width: 100%; }
+.ask p { color: var(--muted); margin: 14px 0 0; max-width: 70ch; }
+.ask .try { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 12px; font-size: 14px; color: var(--faint); }
+.ask .try button { font: inherit; font-size: 14px; background: none; border: 1px solid var(--rule); border-radius: 999px; padding: 3px 11px; color: var(--muted); cursor: pointer; }
+.ask .try button:hover { border-color: var(--faint); color: var(--ink); }
+
+.results { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 32px; align-items: start; padding-bottom: 40px; }
+.status { font-size: 14px; color: var(--muted); margin: 0 0 10px; }
+.status b { color: var(--ink); }
+ol.list { list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--ink); }
+ol.list > li { border-bottom: 1px solid var(--rule); }
+.row { display: grid; grid-template-columns: 30px minmax(0, 1fr) 150px; gap: 14px; align-items: center; padding: 14px 0; width: 100%;
+  background: none; border: 0; font: inherit; color: inherit; text-align: left; cursor: pointer; }
+.row:hover .name { text-decoration: underline; }
+.rank { font-weight: 800; font-size: 18px; color: var(--faint); }
+.name { font-weight: 600; font-size: 17px; }
+.meta { font-size: 13.5px; color: var(--muted); margin-top: 2px; }
+.stars { color: var(--star); letter-spacing: 1px; }
+.stars .off { color: #d9dce0; }
+.score { display: grid; gap: 4px; }
+.score .num { font-weight: 800; font-size: 20px; text-align: right; }
+.score .num small { font-weight: 500; font-size: 12px; color: var(--faint); }
+.bar { position: relative; height: 6px; background: var(--wash); border-radius: 3px; }
+.bar i { position: absolute; left: 0; top: 0; bottom: 0; background: var(--accent); border-radius: 3px; }
+.bar u { position: absolute; top: -3px; bottom: -3px; width: 2px; background: var(--ink); left: 50%; }
+.chips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+.chip { font-size: 12.5px; padding: 1px 8px; border-radius: 999px; }
+.chip.w { background: var(--worse-wash); color: var(--worse); }
+.chip.b { background: var(--better-wash); color: var(--better); }
+.detail { padding: 0 0 16px 44px; }
+.detail table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.detail th { text-align: left; font-weight: 600; color: var(--muted); font-size: 12.5px; padding: 4px 6px; border-bottom: 1px solid var(--rule); }
+.detail td { padding: 6px; border-bottom: 1px solid var(--wash); vertical-align: top; }
+.detail td.n, .detail th.n { text-align: right; white-space: nowrap; }
+.flag { font-size: 12.5px; font-weight: 600; white-space: nowrap; }
+.flag.b { color: var(--better); } .flag.w { color: var(--worse); } .flag.n { color: var(--same); }
+.detail .contact { font-size: 13.5px; color: var(--muted); margin: 8px 0 0; }
+.empty { padding: 26px 0; color: var(--muted); }
+
+aside.locator { position: sticky; top: 16px; }
+aside.locator svg { width: 100%; height: auto; display: block; background: var(--wash); border-radius: 8px; }
+aside.locator p { font-size: 13px; color: var(--muted); margin: 8px 0 0; }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 13px; color: var(--muted); margin-top: 6px; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+
+section.block { padding: 36px 0; border-top: 1px solid var(--rule); }
+section.block h2 { font-size: 24px; font-weight: 700; letter-spacing: -0.015em; margin: 0 0 6px; }
+section.block > p { color: var(--muted); margin: 0 0 18px; max-width: 72ch; }
+.two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; }
+.scroll { overflow-x: auto; }
+table.data { width: 100%; border-collapse: collapse; font-size: 14px; }
+table.data th { text-align: left; font-size: 12.5px; color: var(--muted); font-weight: 600; padding: 7px 8px; border-bottom: 2px solid var(--ink); white-space: nowrap; }
+table.data td { padding: 8px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+table.data td.n, table.data th.n { text-align: right; white-space: nowrap; }
+.filterbar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 12px; font-size: 14px; color: var(--muted); }
+.filterbar select { font: inherit; font-size: 14px; padding: 4px 8px; border: 1px solid var(--rule); border-radius: 6px; background: #fff; color: var(--ink); }
+.chart { position: relative; height: 300px; }
+.map svg { width: 100%; height: auto; display: block; }
+.map path { stroke: #fff; stroke-width: 1; }
+.map path:hover { stroke: var(--ink); stroke-width: 1.5; }
+.scale { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--muted); margin-top: 8px; }
+.scale span.ramp { width: 160px; height: 8px; border-radius: 4px; background: linear-gradient(90deg, #eceefb, #2f3ba2); }
+.facts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; border-top: 2px solid var(--ink); }
+.facts div { padding: 14px 14px 14px 0; border-bottom: 1px solid var(--rule); }
+.facts b { display: block; font-size: 26px; font-weight: 800; }
+.facts span { font-size: 13.5px; color: var(--muted); }
+.steps { margin: 18px 0 0; padding-left: 20px; color: var(--muted); max-width: 80ch; }
+.steps li { margin-bottom: 6px; }
+.steps b { color: var(--ink); }
+footer { padding: 28px 0 48px; border-top: 1px solid var(--rule); font-size: 13.5px; color: var(--faint); display: grid; gap: 6px; }
+@media (max-width: 900px) {
+  .results, .two { grid-template-columns: minmax(0, 1fr); }
+  aside.locator { position: static; max-width: 420px; }
+  .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 520px) {
+  .row { grid-template-columns: 24px minmax(0, 1fr); }
+  .row .score { grid-column: 2; }
+  .detail { padding-left: 0; }
+  header.top nav { margin-left: 0; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="top">
+    <b>Hospital Quality Check</b>
+    <span id="asOf"></span>
+    <nav><a href="#watch">Watch list</a><a href="#history">Rating history</a><a href="#pipeline">How it's built</a></nav>
+  </header>
+
+  <section class="ask" aria-label="Find a hospital">
+    <h1>I need care for <select id="reason" aria-label="Reason for care"></select> near ZIP <input id="zip" inputmode="numeric" maxlength="5" aria-label="ZIP code" value="10001"> within <select id="radius" aria-label="Distance"><option>10</option><option selected>25</option><option>50</option><option>100</option></select> miles.</h1>
+    <p>Hospitals are ranked on the Medicare measures that matter for that reason: deaths, readmissions, complications, infections, ER waits and patient ratings, each compared with every other US hospital. Measures specific to the reason count fully; hospital-wide ones count half.</p>
+    <div class="try"><span>Try</span><button type="button" data-z="60611" data-r="heart_attack">Chicago, heart attack</button><button type="button" data-z="77030" data-r="hip_knee">Houston, hip or knee</button><button type="button" data-z="02115" data-r="emergency">Boston, ER visit</button><button type="button" data-z="94110" data-r="stroke">San Francisco, stroke</button></div>
+  </section>
+
+  <div class="results">
+    <div>
+      <p class="status" id="status" aria-live="polite"></p>
+      <ol class="list" id="list"></ol>
+    </div>
+    <aside class="locator" aria-label="Map of the hospitals in the list">
+      <svg id="loc" viewBox="0 0 300 300" role="img" aria-label="Hospitals around the ZIP code"></svg>
+      <div class="legend"><span><i style="background:var(--ink)"></i>Your ZIP</span><span><i style="background:var(--accent)"></i>Ranked hospital</span></div>
+      <p id="locNote"></p>
+    </aside>
+  </div>
+
+  <section class="block" id="watch">
+    <h2>Hospitals to watch</h2>
+    <p>Hospitals Medicare rates significantly worse than the national rate on two or more patient outcomes (deaths, readmissions, complications, infections), or whose star rating fell during the past year.</p>
+    <div class="filterbar"><label for="watchState">State</label><select id="watchState"></select><span id="watchCount"></span></div>
+    <div class="scroll"><table class="data" id="watchTable"></table></div>
+  </section>
+
+  <section class="block" id="history">
+    <h2>How star ratings moved since 2021</h2>
+    <p>Every past Medicare release replayed through a dbt snapshot, so each hospital's rating has a full history. Bars show how many hospitals held each rating after each release; the table shows how many moved up or down.</p>
+    <div class="two">
+      <div class="chart"><canvas id="histChart" role="img" aria-label="Hospitals by star rating at each release"></canvas></div>
+      <div class="scroll"><table class="data" id="movesTable"></table></div>
+    </div>
+  </section>
+
+  <section class="block" id="states">
+    <h2>By state</h2>
+    <p>Share of rated hospitals with four or five stars. Hover a state for its numbers.</p>
+    <div class="two">
+      <div class="map"><svg id="map" viewBox="0 0 975 610" role="img" aria-label="Map of the share of 4 and 5 star hospitals by state"></svg>
+        <div class="scale"><span>fewer</span><span class="ramp"></span><span>more 4–5 star hospitals</span></div></div>
+      <div class="scroll"><table class="data" id="stateTable"></table></div>
+    </div>
+  </section>
+
+  <section class="block" id="pipeline">
+    <h2>How it's built</h2>
+    <p>A weekly pipeline downloads six Medicare datasets, models them with dbt in DuckDB, tests every layer and publishes this page. Dagster orchestrates it; every dbt test is a Dagster asset check, so a failed check stops a bad release from reaching the page.</p>
+    <div class="facts" id="facts"></div>
+    <ol class="steps">
+      <li><b>Ingest</b>: the current release of each dataset from the CMS Provider Data Catalog API, ZIP code centroids from the Census Bureau, and every past release since 2021 from the CMS archive API.</li>
+      <li><b>Stage</b>: one view per source fixes types, US-format dates, the literal text "Not Available", and six different spellings of "better/worse than national".</li>
+      <li><b>Model</b>: all measures stacked into one table, each hospital benchmarked against every other, then reason scores, a watch list and state summaries. The marts have enforced contracts.</li>
+      <li><b>History</b>: <span id="nReleases"></span> releases replayed oldest first through a dbt snapshot, so each rating version carries the date of the release it came from.</li>
+      <li><b>Test</b>: schema tests, custom tests and dbt unit tests for the cleaning and ranking logic run on every build and in CI.</li>
+    </ol>
+    <p style="margin-top:14px"><a href="lineage.html">Browse the dbt docs and lineage graph</a> · <a href="https://github.com/madhubuddaraju/hospital-quality-warehouse">Source code</a></p>
+  </section>
+
+  <footer>
+    <div>Data: Medicare Care Compare (CMS Provider Data Catalog) and the US Census Bureau gazetteer. Distances use ZIP code centres, not street addresses.</div>
+    <div>This page compares published quality measures. It is not medical advice; in an emergency call 911 and go to the nearest emergency department.</div>
+  </footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+const D = __DATA__;
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+const fmt = (x) => Math.round(x).toLocaleString("en-US");
+const pct = (x) => (x * 100).toFixed(0) + "%";
+const stars = (n) => n ? `<span class="stars" aria-label="${n} of 5 stars">${"★".repeat(n)}<span class="off">${"★".repeat(5 - n)}</span></span>` : `<span style="color:var(--faint)">not rated</span>`;
+
+const ZIP = new Map(D.zips.split(";").map((r) => { const [z, a, b] = r.split(","); return [z, [+a, +b]]; }));
+const H = D.hospitals, CAT = D.catalog, MI = Object.fromEntries(CAT.map((m, i) => [m.measure_id, i]));
+const SCORES = {};
+for (const [reason, rows] of Object.entries(D.scores)) SCORES[reason] = rows.map(([i, s, w, b]) => ({ i, s, w, b }));
+function miles(a, b) {
+  const R = 3958.8, t = Math.PI / 180, dl = (b[0] - a[0]) * t, dn = (b[1] - a[1]) * t;
+  const h = Math.sin(dl / 2) ** 2 + Math.cos(a[0] * t) * Math.cos(b[0] * t) * Math.sin(dn / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(h));
+}
+$("asOf").textContent = `Medicare data released ${new Date(D.cms_modified + "T12:00").toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}`;
+const reasonLabel = Object.fromEntries(D.reasons.map((r) => [r.reason, r.label]));
+const order = ["general", "emergency", "heart_attack", "heart_failure", "stroke", "pneumonia", "copd", "hip_knee", "heart_surgery", "surgery"];
+$("reason").innerHTML = order.filter((r) => reasonLabel[r]).map((r) => `<option value="${r}">${reasonLabel[r].toLowerCase()}</option>`).join("");
+
+function unitText(v, m) {
+  if (v == null) return "–";
+  if (m.unit === "%") return v.toFixed(1) + "%";
+  if (m.unit === "min") return Math.round(v) + " min";
+  if (m.unit === "stars") return v.toFixed(0) + " of 5";
+  if (m.unit === "ratio") return v.toFixed(2);
+  return v.toFixed(2) + " " + m.unit;
+}
+const FLAG = { b: ["b", "better than national"], w: ["w", "worse than national"], n: ["n", "no different"] };
+
+function detail(i, reason) {
+  const rows = CAT.map((m, j) => ({ m, j })).filter(({ m, j }) => (m.reasons === reason || m.reasons === "general") && D.values[i][j] != null)
+    .sort((a, b) => (a.m.reasons === reason ? 0 : 1) - (b.m.reasons === reason ? 0 : 1));
+  const h = H[i];
+  return `<table><thead><tr><th>Measure</th><th class="n">This hospital</th><th class="n">US median</th><th>Medicare's judgement</th></tr></thead><tbody>` +
+    rows.map(({ m, j }) => { const f = FLAG[D.flags[i][j]];
+      return `<tr><td>${esc(m.label)}${m.lower_is_better ? "" : ""}<div style="font-size:12px;color:var(--faint)">${m.lower_is_better ? "lower is better" : "higher is better"}${m.reasons === reason ? "" : " · hospital-wide"}</div></td>
+        <td class="n">${unitText(D.values[i][j], m)}</td><td class="n">${unitText(D.medians[m.measure_id], m)}</td>
+        <td>${f ? `<span class="flag ${f[0]}">${f[1]}</span>` : `<span class="flag n">no comparison</span>`}</td></tr>`; }).join("") +
+    `</tbody></table><p class="contact">${esc(h.hospital_type)}${h.has_emergency_services ? " · emergency department" : " · no emergency department"}${h.ed_volume ? ` (${esc(h.ed_volume)} volume)` : ""} · ${esc(h.phone)}${h.location_source === "nearby zip" ? " · placed at a nearby ZIP code" : ""}</p>`;
+}
+
+function search() {
+  const reason = $("reason").value, radius = +$("radius").value, zip = $("zip").value.trim();
+  const here = ZIP.get(zip);
+  if (!/^\d{5}$/.test(zip) || !here) {
+    $("status").innerHTML = /^\d{5}$/.test(zip) ? `ZIP ${esc(zip)} isn't in the Census list of ZIP codes. Try a nearby residential ZIP.` : "Enter a five-digit ZIP code.";
+    $("list").innerHTML = ""; drawLocator(null, []); return;
+  }
+  const near = (SCORES[reason] || []).map((r) => ({ ...r, d: miles(here, [H[r.i].lat, H[r.i].lon]) })).filter((r) => r.d <= radius)
+    .sort((a, b) => b.s - a.s || a.d - b.d);
+  const top = near.slice(0, 12);
+  $("status").innerHTML = near.length
+    ? `<b>${near.length}</b> hospital${near.length > 1 ? "s" : ""} within ${radius} miles report enough data for ${esc(reasonLabel[reason].toLowerCase())}${near.length > 12 ? "; the best 12 are shown" : ""}. Score: 100 = best in the country on every measure, 50 = middle.`
+    : `No hospital within ${radius} miles reports enough data for ${esc(reasonLabel[reason].toLowerCase())}. Try a larger distance.`;
+  $("list").innerHTML = top.map((r, k) => { const h = H[r.i];
+    return `<li><button class="row" type="button" aria-expanded="false" data-i="${r.i}">
+      <span class="rank">${k + 1}</span>
+      <span><span class="name">${esc(h.facility_name)}</span><div class="meta">${esc(h.city)}, ${h.state} · ${r.d.toFixed(1)} mi · ${stars(h.overall_rating)}</div>
+        <span class="chips">${r.w ? `<span class="chip w">${r.w} worse than national</span>` : ""}${r.b ? `<span class="chip b">${r.b} better than national</span>` : ""}</span></span>
+      <span class="score"><span class="num">${Math.round(r.s)}<small> / 100</small></span><span class="bar" aria-hidden="true"><i style="width:${r.s}%"></i><u></u></span></span>
+    </button><div class="detail" hidden></div></li>`; }).join("");
+  drawLocator(here, top, radius);
+}
+$("list").addEventListener("click", (e) => {
+  const b = e.target.closest("button.row"); if (!b) return;
+  const det = b.nextElementSibling, open = b.getAttribute("aria-expanded") === "true";
+  if (!open && !det.innerHTML) det.innerHTML = detail(+b.dataset.i, $("reason").value);
+  det.hidden = open; b.setAttribute("aria-expanded", String(!open));
+});
+function drawLocator(here, top, radius) {
+  if (!here) { $("loc").innerHTML = ""; $("locNote").textContent = ""; return; }
+  const s = 140 / radius, cos = Math.cos(here[0] * Math.PI / 180);
+  const xy = (p) => [150 + (p[1] - here[1]) * 69.17 * cos * s, 150 - (p[0] - here[0]) * 69.17 * s];
+  let g = `<circle cx="150" cy="150" r="140" fill="#fff" stroke="#e1e4e8"/><circle cx="150" cy="150" r="70" fill="none" stroke="#e1e4e8" stroke-dasharray="3 4"/>`;
+  g += `<text x="150" y="76" text-anchor="middle" font-size="10" fill="#8b929b">${radius / 2} mi</text>`;
+  top.slice().reverse().forEach((r, k) => { const [x, y] = xy([H[r.i].lat, H[r.i].lon]); const n = top.length - k;
+    g += `<g><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="9" fill="var(--accent)"/><text x="${x.toFixed(1)}" y="${(y + 3.5).toFixed(1)}" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">${n}</text></g>`; });
+  g += `<rect x="144" y="144" width="12" height="12" fill="var(--ink)" transform="rotate(45 150 150)"/>`;
+  $("loc").innerHTML = g;
+  $("locNote").textContent = top.length ? "Numbers match the ranked list. Positions use ZIP code centres." : "";
+}
+for (const id of ["reason", "radius"]) $(id).addEventListener("change", search);
+$("zip").addEventListener("input", () => { if ($("zip").value.trim().length === 5) search(); });
+document.querySelector(".try").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; $("zip").value = b.dataset.z; $("reason").value = b.dataset.r; search(); });
+search();
+
+// ---- watch list
+const wStates = [...new Set(D.watch.map((w) => w.state))].sort();
+$("watchState").innerHTML = `<option value="">All states</option>` + wStates.map((s) => `<option>${s}</option>`).join("");
+function drawWatch() {
+  const st = $("watchState").value, rows = D.watch.filter((w) => !st || w.state === st);
+  $("watchCount").textContent = `${rows.length} hospital${rows.length === 1 ? "" : "s"}`;
+  $("watchTable").innerHTML = `<thead><tr><th>Hospital</th><th>Rating</th><th class="n">Outcomes worse</th><th>Why it's listed</th></tr></thead><tbody>` +
+    rows.slice(0, 60).map((w) => `<tr><td><b>${esc(w.facility_name)}</b><div style="font-size:13px;color:var(--muted)">${esc(w.city)}, ${w.state}</div></td>
+      <td>${stars(w.overall_rating)}${w.previous_rating ? `<div style="font-size:12.5px;color:var(--worse)">down from ${w.previous_rating} (${w.rating_dropped_on})</div>` : ""}</td>
+      <td class="n">${w.outcomes_worse || "–"}</td><td style="font-size:13.5px">${esc(w.worse_measures || w.reason)}</td></tr>`).join("") + "</tbody>" +
+    (rows.length > 60 ? `<caption style="caption-side:bottom;text-align:left;font-size:13px;color:var(--faint);padding-top:8px">Showing 60 of ${rows.length}. Pick a state to see all of its hospitals.</caption>` : "");
+}
+$("watchState").addEventListener("change", drawWatch); drawWatch();
+
+// ---- rating history
+if (D.history.length && window.Chart) {
+  Chart.defaults.font.family = getComputedStyle(document.body).fontFamily;
+  const colors = ["#b3261e", "#e0846b", "#c9ccd2", "#7d85d6", "#2f3ba2"];
+  new Chart($("histChart"), { type: "bar", data: { labels: D.history.map((h) => h.release.slice(0, 7)),
+    datasets: [1, 2, 3, 4, 5].map((s, k) => ({ label: `${s} star${s > 1 ? "s" : ""}`, data: D.history.map((h) => h["r" + s]), backgroundColor: colors[k], borderWidth: 0 })) },
+    options: { responsive: true, maintainAspectRatio: false, animation: false, plugins: { legend: { position: "bottom", labels: { boxWidth: 10, color: "#5b6470" } },
+      tooltip: { mode: "index", intersect: false } },
+      scales: { x: { stacked: true, grid: { display: false }, ticks: { color: "#5b6470", maxRotation: 0, autoSkipPadding: 14 } },
+                y: { stacked: true, grid: { color: "#eef0f2" }, border: { display: false }, ticks: { color: "#5b6470" }, title: { display: true, text: "hospitals", color: "#8b929b" } } } } });
+}
+$("movesTable").innerHTML = `<thead><tr><th>Release</th><th class="n">Ratings up</th><th class="n">Ratings down</th></tr></thead><tbody>` +
+  D.moves.slice().reverse().map((m) => `<tr><td>${m.release}</td><td class="n" style="color:var(--better)">${m.up ? "+" + fmt(m.up) : "–"}</td><td class="n" style="color:var(--worse)">${m.down ? "−" + fmt(m.down) : "–"}</td></tr>`).join("") + "</tbody>";
+
+// ---- states
+const ST = Object.fromEntries(D.states.map((s) => [s.state, s]));
+const vals = D.states.filter((s) => s.share_4_or_5_stars != null && s.rated_hospitals >= 5).map((s) => s.share_4_or_5_stars);
+const lo = Math.min(...vals), hi = Math.max(...vals);
+const mix = (t) => { const a = [236, 238, 251], b = [47, 59, 162]; return `rgb(${a.map((v, k) => Math.round(v + (b[k] - v) * t)).join(",")})`; };
+$("map").innerHTML = Object.entries(D.geo).map(([abbr, g]) => { const s = ST[abbr];
+  const fill = s && s.share_4_or_5_stars != null && s.rated_hospitals >= 5 ? mix((s.share_4_or_5_stars - lo) / ((hi - lo) || 1)) : "#eef0f2";
+  return `<path d="${g.d}" fill="${fill}"><title>${esc(g.name)}${s ? `: ${s.share_4_or_5_stars != null ? pct(s.share_4_or_5_stars) : "–"} of ${s.rated_hospitals} rated hospitals have 4–5 stars` : ""}</title></path>`; }).join("");
+const ranked = D.states.filter((s) => s.rated_hospitals >= 5).sort((a, b) => b.share_4_or_5_stars - a.share_4_or_5_stars);
+$("stateTable").innerHTML = `<thead><tr><th>State</th><th class="n">Hospitals</th><th class="n">4–5 stars</th><th class="n">Median ER time</th></tr></thead><tbody>` +
+  ranked.map((s) => `<tr><td>${s.state}</td><td class="n">${s.hospitals}</td><td class="n">${pct(s.share_4_or_5_stars)}</td><td class="n">${s.median_er_minutes ? Math.round(s.median_er_minutes) + " min" : "–"}</td></tr>`).join("") + "</tbody>";
+
+// ---- pipeline facts
+$("nReleases").textContent = D.history.length;
+const P = D.pipeline, passed = (P.last_build.pass || 0) + (P.last_build.success || 0);
+$("facts").innerHTML = [[fmt(H.length), "hospitals on the map"], [fmt(D.history.length), "releases in the rating history"],
+  [`${(P.nodes.model || 0)} / ${(P.nodes.test || 0) + (P.nodes.unit_test || 0)}`, "dbt models / tests"],
+  [`${fmt(passed)} of ${fmt(Object.values(P.last_build).reduce((a, b) => a + b, 0))}`, "checks passed in the last build"]]
+  .map(([v, l]) => `<div><b>${v}</b><span>${l}</span></div>`).join("");
+</script>
+</body>
+</html>

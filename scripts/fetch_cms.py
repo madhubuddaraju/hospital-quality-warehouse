@@ -90,6 +90,14 @@ def fetch_current() -> dict:
     return manifest
 
 
+def col(df: pd.DataFrame, part: str, year: int) -> str:
+    """First column whose name contains `part` (Census column names vary between years)."""
+    hit = [c for c in df.columns if part in c]
+    if not hit:
+        raise SystemExit(f"Census file {year} has no column like {part!r}: {list(df.columns)}")
+    return hit[0]
+
+
 def fetch_zcta() -> dict:
     for y in range(datetime.now(UTC).year, 2019, -1):
         r = get(ZCTA.format(y=y))
@@ -101,14 +109,9 @@ def fetch_zcta() -> dict:
             df = pd.read_csv(io.StringIO(txt), sep=sep, dtype=str)
             df.columns = [c.strip().lower().lstrip("\ufeff") for c in df.columns]
 
-            def col(part: str) -> str:
-                hit = [c for c in df.columns if part in c]
-                if not hit:
-                    raise SystemExit(f"Census file {y} has no column like {part!r}: {list(df.columns)}")
-                return hit[0]
-            gid = next((c for c in df.columns if c == "geoid"), col("geoid"))
+            gid = next((c for c in df.columns if c == "geoid"), col(df, "geoid", y))
             out = pd.DataFrame({"zip": df[gid].str.strip().str[-5:].str.zfill(5),
-                                "lat": df[col("intptlat")].astype(float), "lon": df[col("intptlong")].astype(float)})
+                                "lat": df[col(df, "intptlat", y)].astype(float), "lon": df[col(df, "intptlong", y)].astype(float)})
             out.to_parquet(CURRENT / "zip_centroids.parquet", index=False)
             print(f"zip centroids: {len(out):,} ZIP codes from the {y} Census gazetteer", flush=True)
             return {"year": y, "rows": len(out), "url": ZCTA.format(y=y)}
@@ -151,6 +154,7 @@ def fetch_history(start_year: int = 2021) -> list[dict]:
             continue                                   # this update did not touch hospital general information
         df = read_csv(blob)
         df["_release"] = date
+        df["_cms_modified"] = date                     # staging reads the release date from this column
         df.to_parquet(out, index=False)
         found.append({"release": date, "url": url, "member": member, "rows": len(df)})
         print(f"history {date}: {len(df):,} hospitals ({member})", flush=True)
@@ -171,8 +175,9 @@ def profile(manifest: dict) -> None:
         if mcol:
             ncol = next((c for c in df.columns if c.endswith("measure_name") or c.endswith("question")), None)
             g = df.groupby(mcol)
+            vcol = "score" if "score" in df.columns else "hcahps_answer_percent"
             p["measures"] = {k: {"name": (v[ncol].iloc[0] if ncol else ""), "rows": len(v),
-                                 "not_available": int((v.get("score", v.get("hcahps_answer_percent", pd.Series(dtype=str))) == "Not Available").sum())}
+                                 "not_available": int((v[vcol] == "Not Available").sum())}
                              for k, v in g}
         prof[name] = p
         df[df["facility_id"].isin(keep)].to_csv(FIXTURES / f"{name}.csv", index=False)

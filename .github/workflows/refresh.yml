@@ -1,0 +1,46 @@
+name: Weekly refresh
+
+# Runs the Dagster pipeline against the live CMS data and publishes the dashboard, the dbt docs and the rating
+# history (the snapshot is stored as parquet in the repo, so history survives between runs).
+on:
+  schedule:
+    - cron: "17 11 * * 1"      # Mondays, 07:17 New York
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Reuse past releases already downloaded
+        uses: actions/cache@v4
+        with:
+          path: data/raw/history
+          key: cms-history-${{ github.run_id }}
+          restore-keys: cms-history-
+      - name: Parse the dbt project
+        run: cd dbt && dbt parse
+        env:
+          DBT_PROFILES_DIR: .
+      - name: Materialize every asset
+        run: dagster asset materialize -m hospital_quality.definitions --select '*'
+      - name: Publish
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898699+github-actions[bot]@users.noreply.github.com"
+          git add docs data/snapshots data/raw/manifest.json
+          git commit -m "Weekly refresh $(date -u +%Y-%m-%d)" || exit 0
+          for i in 1 2 3; do git pull --rebase && git push && break; sleep 5; done

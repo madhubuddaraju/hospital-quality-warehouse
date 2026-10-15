@@ -8,3 +8,7 @@ dbt/logs/
 dbt/dbt_packages/
 .dagster/
 *.log
+dbt/target/
+dbt/logs/
+.tmp_dagster*
+tmp*/

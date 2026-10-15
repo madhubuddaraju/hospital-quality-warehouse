@@ -1,0 +1,12 @@
+snapshots:
+  - name: hospital_rating_snapshot
+    description: >
+      Type 2 history of each hospital's rating and identity. Past releases are replayed through it oldest first
+      (Dagster asset rating_history), so dbt_valid_from is the CMS release date, not the date this pipeline ran.
+    relation: ref('stg_cms__hospitals')
+    config:
+      unique_key: facility_id
+      strategy: check
+      check_cols: [overall_rating, facility_name, hospital_type, ownership, has_emergency_services]
+      updated_at: cms_modified
+      hard_deletes: invalidate

@@ -1,0 +1,135 @@
+version: 2
+
+models:
+  - name: dim_hospitals
+    description: One row per hospital with location (ZIP centroid) and overall star rating. Read by the dashboard.
+    config:
+      contract: {enforced: true}
+    columns:
+      - {name: facility_id, data_type: varchar, constraints: [{type: not_null}, {type: primary_key}], data_tests: [unique]}
+      - {name: facility_name, data_type: varchar, constraints: [{type: not_null}]}
+      - {name: address, data_type: varchar}
+      - {name: city, data_type: varchar}
+      - {name: state, data_type: varchar, constraints: [{type: not_null}]}
+      - {name: zip5, data_type: varchar}
+      - {name: county, data_type: varchar}
+      - {name: phone, data_type: varchar}
+      - {name: hospital_type, data_type: varchar}
+      - {name: ownership, data_type: varchar}
+      - {name: has_emergency_services, data_type: boolean}
+      - {name: is_birthing_friendly, data_type: boolean}
+      - {name: overall_rating, data_type: integer}
+      - {name: ed_volume, data_type: varchar}
+      - name: lat
+        data_type: double
+        description: Latitude of the hospital's ZIP code centroid (not the building).
+        data_tests: [{between: {arguments: {min_value: 13, max_value: 72}}}]
+      - name: lon
+        data_type: double
+        data_tests: [{between: {arguments: {min_value: -180, max_value: 146}}}]
+      - name: location_source
+        data_type: varchar
+        description: "'zip' = the hospital's own ZIP centroid; 'nearby zip' = nearest ZIP in the same 3-digit area (PO-box ZIPs)."
+      - {name: cms_modified, data_type: date}
+    data_tests:
+      - located_share:
+          arguments: {min_share: 0.95}
+
+  - name: fct_hospital_measures
+    description: One row per hospital and measure with the national median and percentile.
+    columns:
+      - name: facility_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments: {to: ref('dim_hospitals'), field: facility_id}
+      - name: goodness_pctile
+        description: 1 = best nationally, 0 = worst, adjusted for whether lower or higher is better.
+        data_tests: [not_null, {between: {arguments: {min_value: 0, max_value: 1}}}]
+    data_tests:
+      - unique_combination:
+          arguments: {columns: [facility_id, measure_id]}
+
+  - name: mart_hospital_reason_scores
+    description: 0-100 score per hospital and reason for care. Drives the hospital chooser.
+    config:
+      contract: {enforced: true}
+    columns:
+      - {name: facility_id, data_type: varchar, constraints: [{type: not_null}]}
+      - name: reason
+        data_type: varchar
+        constraints: [{type: not_null}]
+        data_tests:
+          - relationships:
+              arguments: {to: ref('care_reasons'), field: reason}
+      - {name: score, data_type: double, data_tests: [not_null, {between: {arguments: {min_value: 0, max_value: 100}}}]}
+      - {name: own_measures, data_type: bigint}
+      - {name: measures_used, data_type: bigint}
+      - {name: measures_worse_than_national, data_type: bigint}
+      - {name: measures_better_than_national, data_type: bigint}
+    data_tests:
+      - unique_combination:
+          arguments: {columns: [facility_id, reason]}
+
+  - name: mart_state_summary
+    columns:
+      - {name: state, data_tests: [unique, not_null]}
+
+  - name: mart_watch_list
+    description: Hospitals worse than the national rate on two or more outcomes, or whose rating fell in the year before the current release.
+    columns:
+      - {name: facility_id, data_tests: [unique, not_null]}
+
+  - name: mart_rating_history
+    description: Star rating periods per hospital, from the snapshot of every replayed release.
+
+unit_tests:
+  - name: percentile_direction_follows_the_measure
+    description: For a lower-is-better measure the lowest score is best (1.0); for a higher-is-better one the highest is.
+    model: int_measures__benchmarked
+    given:
+      - input: ref('int_measures__unioned')
+        format: csv
+        rows: |
+          facility_id,measure_id,score,lower_is_better
+          A,READM_30_HF,18,true
+          B,READM_30_HF,20,true
+          C,READM_30_HF,22,true
+          A,SEP_1,40,false
+          B,SEP_1,60,false
+          C,SEP_1,80,false
+    expect:
+      format: csv
+      rows: |
+        facility_id,measure_id,goodness_pctile,national_median
+        A,READM_30_HF,1.0,20
+        B,READM_30_HF,0.5,20
+        C,READM_30_HF,0.0,20
+        A,SEP_1,0.0,60
+        B,SEP_1,0.5,60
+        C,SEP_1,1.0,60
+
+  - name: reason_score_weights_hospital_wide_measures_half
+    description: A heart failure score uses heart failure measures at full weight and hospital-wide measures at half weight.
+    model: mart_hospital_reason_scores
+    overrides:
+      vars: {min_reason_measures: 1}
+    given:
+      - input: ref('fct_hospital_measures')
+        format: csv
+        rows: |
+          facility_id,measure_id,reasons,goodness_pctile,compared_to_national
+          A,READM_30_HF,heart_failure,1.0,better
+          A,HAI_1_SIR,general,0.0,worse
+      - input: ref('care_reasons')
+        format: csv
+        rows: |
+          reason,label
+          heart_failure,Heart failure
+          general,General hospital stay
+    expect:
+      format: csv
+      rows: |
+        facility_id,reason,score,own_measures,measures_worse_than_national
+        A,heart_failure,66.7,1,1
+        A,general,0.0,1,1

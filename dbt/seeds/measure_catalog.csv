@@ -1,0 +1,31 @@
+measure_id,label,domain,reasons,lower_is_better,unit
+READM_30_AMI,Readmitted within 30 days after a heart attack,readmission,heart_attack,true,%
+READM_30_HF,Readmitted within 30 days for heart failure,readmission,heart_failure,true,%
+READM_30_PN,Readmitted within 30 days after pneumonia,readmission,pneumonia,true,%
+READM_30_COPD,Readmitted within 30 days for COPD,readmission,copd,true,%
+READM_30_CABG,Readmitted within 30 days after heart bypass surgery,readmission,heart_surgery,true,%
+READM_30_HIP_KNEE,Readmitted within 30 days after hip or knee replacement,readmission,hip_knee,true,%
+Hybrid_HWR,Readmitted within 30 days for any reason,readmission,general,true,%
+MORT_30_AMI,Died within 30 days of a heart attack,mortality,heart_attack,true,%
+MORT_30_HF,Died within 30 days of heart failure care,mortality,heart_failure,true,%
+MORT_30_PN,Died within 30 days of pneumonia care,mortality,pneumonia,true,%
+MORT_30_COPD,Died within 30 days of COPD care,mortality,copd,true,%
+MORT_30_CABG,Died within 30 days of heart bypass surgery,mortality,heart_surgery,true,%
+MORT_30_STK,Died within 30 days of a stroke,mortality,stroke,true,%
+Hybrid_HWM,Died within 30 days of a hospital stay for any reason,mortality,general,true,%
+COMP_HIP_KNEE,Complications after hip or knee replacement,safety,hip_knee,true,%
+PSI_90,Serious preventable complications (patient safety index),safety,surgery,true,ratio
+PSI_04,Deaths among surgical patients with treatable complications,safety,surgery,true,per 1000
+HAI_1_SIR,Bloodstream infections from central lines,infection,general,true,ratio
+HAI_2_SIR,Urinary tract infections from catheters,infection,general,true,ratio
+HAI_3_SIR,Infections after colon surgery,infection,surgery,true,ratio
+HAI_4_SIR,Infections after abdominal hysterectomy,infection,surgery,true,ratio
+HAI_5_SIR,MRSA bloodstream infections,infection,general,true,ratio
+HAI_6_SIR,C. diff intestinal infections,infection,general,true,ratio
+OP_18b,Median time in the ER before going home,timeliness,emergency,true,min
+OP_22,Patients who left the ER without being seen,timeliness,emergency,true,%
+SEP_1,Sepsis patients who got all the recommended early care,care_process,emergency,false,%
+OP_23,Stroke patients who got a head CT result within 45 minutes,care_process,stroke,false,%
+H_STAR_RATING,Patient survey summary rating,patient_experience,general,false,stars
+H_HSP_RATING_9_10,Patients who rated the hospital 9 or 10 out of 10,patient_experience,general,false,%
+H_RECMND_DY,Patients who would definitely recommend the hospital,patient_experience,general,false,%

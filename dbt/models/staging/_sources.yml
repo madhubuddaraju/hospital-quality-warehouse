@@ -1,0 +1,34 @@
+version: 2
+
+sources:
+  - name: cms
+    description: >
+      Medicare Care Compare hospital data (CMS Provider Data Catalog), downloaded by scripts/fetch_cms.py and stored
+      as parquet with snake_case column names. Every column arrives as text, exactly as CMS publishes it.
+    meta:
+      external_location: "{{ env_var('RAW_DIR', '../data/raw/current') }}/{name}.parquet"
+    config:
+      loaded_at_field: "cast(_cms_modified as timestamp)"
+      freshness:
+        warn_after: {count: 120, period: day}     # CMS refreshes these datasets quarterly
+        error_after: {count: 240, period: day}
+    tables:
+      - name: hospital_general
+        description: One row per hospital, with the overall star rating (Hospital General Information, xubh-q36u).
+      - name: unplanned_visits
+        description: Readmission and return-visit measures (Unplanned Hospital Visits, 632h-zaca).
+      - name: complications_deaths
+        description: 30-day death rates, surgical complications and the PSI-90 safety index (Complications and Deaths, ynj2-r877).
+      - name: timely_care
+        description: Emergency department times and care-process measures such as sepsis care (Timely and Effective Care, yv7e-xc69).
+      - name: patient_survey
+        description: HCAHPS patient experience survey results (dgck-syfz).
+      - name: infections
+        description: Healthcare-associated infection measures (77hc-ibv8).
+
+  - name: census
+    description: ZIP code (ZCTA) centroids from the Census Bureau gazetteer, used to find hospitals near a ZIP code.
+    meta:
+      external_location: "{{ env_var('RAW_DIR', '../data/raw/current') }}/{name}.parquet"
+    tables:
+      - name: zip_centroids

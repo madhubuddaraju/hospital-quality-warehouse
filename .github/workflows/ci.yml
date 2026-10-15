@@ -1,0 +1,28 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+    paths-ignore: ["docs/**", "data/**"]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt ruff
+      - run: ruff check hospital_quality scripts
+      - name: Whole pipeline on the committed sample (dbt build, unit tests, snapshot replay, asset checks)
+        run: |
+          rm -rf data/snapshots
+          cd dbt && dbt parse && cd ..
+          dagster asset materialize -m hospital_quality.definitions --select '*'
+          test -s docs/index.html && test -s docs/lineage.html
+        env:
+          USE_FIXTURES: "1"
+          DBT_PROFILES_DIR: dbt
