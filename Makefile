@@ -1,4 +1,4 @@
-export DBT_PROFILES_DIR := dbt
+export DBT_PROFILES_DIR := $(CURDIR)/dbt
 
 .PHONY: install sample live ui test clean
 

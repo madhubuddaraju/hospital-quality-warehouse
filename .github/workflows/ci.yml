@@ -25,4 +25,4 @@ jobs:
           test -s docs/index.html && test -s docs/lineage.html
         env:
           USE_FIXTURES: "1"
-          DBT_PROFILES_DIR: dbt
+          DBT_PROFILES_DIR: ${{ github.workspace }}/dbt
