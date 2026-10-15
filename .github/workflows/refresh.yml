@@ -36,7 +36,8 @@ jobs:
         env:
           DBT_PROFILES_DIR: .
       - name: Materialize every asset
-        run: dagster asset materialize -m hospital_quality.definitions --select '*'
+        run: dagster asset materialize -m hospital_quality.definitions --select '*' 2>&1 | tee refresh.log; test ${PIPESTATUS[0]} -eq 0
+        shell: bash
       - name: Publish
         run: |
           git config user.name "github-actions[bot]"
@@ -44,3 +45,11 @@ jobs:
           git add docs data/snapshots data/raw/manifest.json
           git commit -m "Weekly refresh $(date -u +%Y-%m-%d)" || exit 0
           for i in 1 2 3; do git pull --rebase && git push && break; sleep 5; done
+      - name: Keep the log on failure
+        if: failure()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898699+github-actions[bot]@users.noreply.github.com"
+          grep -E "ERROR|Error|error|STEP_FAILURE|Traceback|  File" refresh.log | tail -n 150 > refresh-errors.log || true
+          git checkout -B refresh-log
+          git add -f refresh-errors.log && git commit -qm log && git push -qf origin refresh-log
