@@ -143,7 +143,7 @@ def hospital_rating_snapshot(context: AssetExecutionContext, dbt: DbtCliResource
             else:
                 os.environ["RAW_DIR"] = raw_dir
             dbt.cli(["run", "--select", "stg_cms__hospitals"]).wait()
-            dbt.cli(["snapshot"]).wait()
+            dbt.cli(["snapshot", "--vars", json.dumps({"snapshot_at": release})]).wait()
             done.add(release)
             context.log.info(f"replayed release {release}")
     os.environ["RAW_DIR"] = raw_dir

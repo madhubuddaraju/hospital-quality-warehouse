@@ -78,7 +78,7 @@ models:
       - {name: state, data_tests: [unique, not_null]}
 
   - name: mart_watch_list
-    description: Hospitals worse than the national rate on two or more outcomes, or whose rating fell in the year before the current release.
+    description: Hospitals worse than the national rate on two or more outcomes, or whose rating fell by 2+ stars or to 1 star in the year before the current release.
     columns:
       - {name: facility_id, data_tests: [unique, not_null]}
 

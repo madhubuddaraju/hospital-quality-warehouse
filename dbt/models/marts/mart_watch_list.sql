@@ -1,5 +1,6 @@
 -- Early warning: hospitals CMS rates significantly worse than the national rate on two or more patient outcomes
--- (readmission, death, safety, infection), or whose star rating fell in the year before the current release.
+-- (readmission, death, safety, infection), or whose star rating fell sharply in the year before the current release:
+-- by two stars or more, or down to one star. (A one-star move is routine: about 1,300 ratings move each year.)
 with worse as (
     select
         facility_id,
@@ -13,7 +14,8 @@ with worse as (
 drops as (
     select facility_id, previous_rating, overall_rating as new_rating, valid_from as changed_on
     from {{ ref('mart_rating_history') }}
-    where is_current and previous_rating is not null and overall_rating < previous_rating
+    where is_current and previous_rating is not null
+      and (previous_rating - overall_rating >= 2 or (overall_rating = 1 and previous_rating > 1))
       and valid_from >= (select max(cms_modified) from {{ ref('dim_hospitals') }}) - interval 365 day
 )
 select
@@ -27,8 +29,8 @@ select
     dr.previous_rating,
     dr.changed_on                                      as rating_dropped_on,
     case
-        when dr.facility_id is not null and coalesce(w.outcomes_worse, 0) >= 2 then 'rating fell and outcomes worse'
-        when dr.facility_id is not null then 'rating fell'
+        when dr.facility_id is not null and coalesce(w.outcomes_worse, 0) >= 2 then 'rating fell sharply and outcomes worse'
+        when dr.facility_id is not null then 'rating fell sharply'
         else 'outcomes worse than national'
     end                                                as reason
 from {{ ref('dim_hospitals') }} d
