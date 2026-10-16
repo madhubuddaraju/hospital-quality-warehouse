@@ -1,13 +1,13 @@
 # Hospital Quality Warehouse
 
-![CI](https://github.com/madhubuddaraju/hospital-quality-warehouse/actions/workflows/ci.yml/badge.svg)
-![Weekly refresh](https://github.com/madhubuddaraju/hospital-quality-warehouse/actions/workflows/refresh.yml/badge.svg)
+![CI](https://github.com/subbarajubuddaraju/hospital-quality-warehouse/actions/workflows/ci.yml/badge.svg)
+![Weekly refresh](https://github.com/subbarajubuddaraju/hospital-quality-warehouse/actions/workflows/refresh.yml/badge.svg)
 ![dbt](https://img.shields.io/badge/dbt-1.12-FF694B)
 ![Dagster](https://img.shields.io/badge/Dagster-1.13-4F43DD)
 ![DuckDB](https://img.shields.io/badge/DuckDB-1.5-FFF000)
 
-**Live: [hospital chooser](https://madhubuddaraju.github.io/hospital-quality-warehouse/) ·
-[dbt docs and lineage graph](https://madhubuddaraju.github.io/hospital-quality-warehouse/lineage.html)**
+**Live: [hospital chooser](https://subbarajubuddaraju.github.io/hospital-quality-warehouse/) ·
+[dbt docs and lineage graph](https://subbarajubuddaraju.github.io/hospital-quality-warehouse/lineage.html)**
 
 ## The problem
 
@@ -103,7 +103,7 @@ that reason scores weight hospital-wide measures at half.
 ## Run it
 
 ```bash
-git clone https://github.com/madhubuddaraju/hospital-quality-warehouse.git
+git clone https://github.com/subbarajubuddaraju/hospital-quality-warehouse.git
 cd hospital-quality-warehouse
 python -m venv .venv && source .venv/bin/activate
 make install

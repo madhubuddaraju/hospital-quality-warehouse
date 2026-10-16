@@ -44,7 +44,7 @@ DATASETS = {
 }
 
 S = requests.Session()
-S.headers["User-Agent"] = "hospital-quality-warehouse (github.com/madhubuddaraju/hospital-quality-warehouse)"
+S.headers["User-Agent"] = "hospital-quality-warehouse (github.com/subbarajubuddaraju/hospital-quality-warehouse)"
 
 
 def get(url: str, tries: int = 4, **kw) -> requests.Response:
